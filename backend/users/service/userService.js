@@ -1,0 +1,46 @@
+const express = require("express");
+const bcrypt = require("bcrypt");
+
+const userRepository = require("../repository/userRepository");
+
+const registerUser = async(user, callback) => {
+  try {
+    console.log("user: ", user.email);
+    const userExists = await userRepository.getUserByEmail(user.email);
+    console.log("userExists: ", userExists);
+    if (userExists) {
+      console.log("User already exists");
+      callback(null, "User already exists");
+      return;
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const Hash = bcrypt.hashSync(user.password, salt);
+
+    const newUser = {
+      username: user.username,
+      gender: user.gender,
+      date_of_birth: user.date_of_birth,
+      mobile: user.mobile,
+      role_id: user.role_id,
+      email: user.email,
+      passwordHash: Hash,
+      passwordSalt: salt,
+    };
+
+    await userRepository.addNewUser(newUser, (err, createdUser) => {
+      if (!err) {
+        console.log("createdUser: ", createdUser);
+        callback(null, "User registered successfully");
+      } else {
+        console.log("Error registering user from else: ", err.message); //Shows error if table name is incorrect
+        callback(err, null);
+      }
+    });
+  }
+  catch (error) {
+    console.log("Error registering user from catch: ", error);
+    throw error;
+  }
+};
+
+module.exports = { registerUser };
