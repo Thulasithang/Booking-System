@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const userRepository = require("../repository/userRepository");
 
-const registerUser = async(user, callback) => {
+const registerUser = async (user, callback) => {
   try {
     const userExists = await userRepository.getUserByEmail(user.email); //Check if user already exists
     if (userExists) {
@@ -12,8 +12,9 @@ const registerUser = async(user, callback) => {
       return;
     }
     // Hashing the password
-    const salt = bcrypt.genSaltSync(10); 
-    const Hash = bcrypt.hashSync(user.password, salt); 
+    const salt = bcrypt.genSaltSync(10);
+    const Hash = bcrypt.hashSync(user.password, salt);
+    console.log("came here after hash");
 
     //Creating new user object
     const newUser = {
@@ -26,7 +27,7 @@ const registerUser = async(user, callback) => {
       passwordHash: Hash,
       passwordSalt: salt,
     };
-
+    console.log("created newUser");
     //Adding new user to the database
     await userRepository.addNewUser(newUser, (err, createdUser) => {
       if (!err) {
@@ -37,8 +38,7 @@ const registerUser = async(user, callback) => {
         callback(err, null);
       }
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.log("Error registering user from catch: ", error);
     throw error;
   }
