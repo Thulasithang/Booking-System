@@ -24,18 +24,18 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// router.post("/login", async (req, res) => {
-//   try {
-//     await userService.loginUser(req.body, (err, user) => {
-//       if (!err) {
-//         res.status(200).json(user);
-//       } else {
-//         res.status(500).json({ message: err.message });
-//       }
-//     });
-//   } catch (error) {
-//     res.status(500).json("Error logging in user not from here");
-//   }
-// });
+router.post("/login", async (req, res) => {
+  try {
+    await userService.loginUser(req.body, (err, user) => {
+      if (!err) {
+        res.status(200).json('Welcome Back ' + user.user_name);
+      } else {
+        res.status(500).json({ message: err.message });
+      }
+    });
+  } catch (error) {
+    res.status(500).json("Error logging in user not from here");
+  }
+});
 
 module.exports = router;

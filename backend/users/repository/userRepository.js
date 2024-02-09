@@ -8,9 +8,11 @@ const getUserByEmail = async (email) => {
   try {
     const result = await UserLoginInfo.findOne({ where: { email: email } });
     if (result) {
-      return true; // User exists
+      console.log("result: ", result.dataValues);
+      return result.dataValues; // User exists
     } else {
-      return false; // User does not exist
+      console.log("result from else ", result);
+      return null; // User does not exist
     }
   } catch (error) {
     console.error("Error:", error.message);
@@ -62,7 +64,7 @@ const addNewUser = async (newUser, callback) => {
     );
 
     const userId = createdNewUser.user_id;
-      console.log("userId: ", userId);
+    console.log("userId: ", userId);
     await UserLoginInfo.create(
       {
         user_id: userId,
@@ -72,7 +74,7 @@ const addNewUser = async (newUser, callback) => {
       },
       { transaction: t }
     );
-      console.log("createdNewUser: ", createdNewUser);
+    console.log("createdNewUser: ", createdNewUser);
     await t.commit();
 
     callback(null, createdNewUser);
@@ -83,5 +85,18 @@ const addNewUser = async (newUser, callback) => {
   }
 };
 
+const updateLastLogin = async (userId, callback) => {
+  await UserLoginInfo.update(
+    { last_login: new Date() },
+    { where: { user_id: userId }, returning: true, plain: true }
+  )
+    .then(async () => {
+      const loggedInUser = await UserAccount.findOne({ where: { user_id: userId } });
+      callback(null, loggedInUser.dataValues);
+    })
+    .catch((err) => {
+      callback(err, null);
+    });
+};
 
-module.exports = { getUserByEmail, addNewUser };
+module.exports = { getUserByEmail, addNewUser, updateLastLogin };

@@ -6,8 +6,8 @@ const userRepository = require("../repository/userRepository");
 const registerUser = async (user, callback) => {
   try {
     const userExists = await userRepository.getUserByEmail(user.email); //Check if user already exists
-    if (userExists) {
-      console.log("User already exists");
+    if (userExists !== null) {
+      console.log("User already exists", userExists);
       callback(null, "User already exists");
       return;
     }
@@ -44,4 +44,36 @@ const registerUser = async (user, callback) => {
   }
 };
 
-module.exports = { registerUser };
+const loginUser = async (user, callback) => {
+  try {
+    const userExists = await userRepository.getUserByEmail(user.email);
+    if (userExists === null) {
+      callback(null, "User does not exist");
+      return;
+    } 
+    console.log("user password: ", user.password);
+    console.log("userExists.password_hash: ", userExists);
+    const validPassword = await bcrypt.compare(user.password, userExists.password_hash);
+    console.log("validPassword: ", validPassword);
+    if (!validPassword) {
+      callback(null, "Invalid password");
+      return;
+    }
+
+    await userRepository.updateLastLogin(userExists.user_id, (err, updatedUser) => {
+      if (!err) {
+        console.log("updatedUser from : ", updatedUser);
+        callback(null, updatedUser);
+      } else {
+        console.log("Error updating last login: ", err.message);
+        callback(err, null);
+      }
+    });
+    
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}
+
+module.exports = { registerUser, loginUser };
