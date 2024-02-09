@@ -1,66 +1,81 @@
-const client = require("../dbConnection");
-
-client.connect();
+const { where } = require("sequelize");
+const Facility = require("../models/facility");
 
 const getAllFacilities = (callback) => {
-  client.query(`SELECT * FROM facilities`, (err, res) => {
-    if (!err) {
-      callback(null, res.rows);
-    } else {
-      callback("Err", null);
-    }
-  });
+  Facility.findAll()
+    .then((facilities) => {
+      callback(null, facilities);
+    })
+    .catch((err) => {
+      callback(err, null);
+      console.log(err);
+    });
 };
 
 const getFacilityById = (id, callback) => {
-  client.query(`SELECT * FROM facilities WHERE fac_id = ${id}`, (err, res) => {
-    if (!err) {
-      callback(null, res.rows);
-    } else {
+  Facility.findByPk(id)
+    .then((facility) => {
+      callback(null, facility);
+    })
+    .catch((err) => {
       callback(err, null);
-    }
-  });
+    });
 };
 
-const addNewFacility = (type, available, price_per_hour, callback) => {
-  client.query(
-    `INSERT INTO facilities (type, available, price_per_hour) VALUES ('${type}', ${available}, ${price_per_hour})`,
-    (err, res) => {
-      if (!err) {
-        callback(null, res.rows);
-      } else {
-        callback(err, null);
-      }
-    }
-  );
+const addNewFacility = (fac_id, type, available, price_per_hour, callback) => {
+  Facility.create({
+    fac_id: fac_id, 
+    type: type,
+    available: available,
+    price_per_hour: price_per_hour,
+  })
+    .then((facility) => {
+      callback(null, facility);
+    })
+    .catch((err) => {
+      callback(err, null);
+    });
 };
 
 const updateFacility = (id, type, available, price_per_hour, callback) => {
-  client.query(
-    `UPDATE facilities SET type = '${type}', available = ${available}, price_per_hour= ${price_per_hour} WHERE fac_id = ${id}`,
-    (err, res) => {
-      if (!err) {
-        callback(null, res);
-      } else {
-        callback(err, null);
-      }
+  Facility.update(
+    {
+      type: type,
+      available: available,
+      price_per_hour: price_per_hour,
+    },
+    {
+      where: {
+        fac_id: id,
+      },
     }
-  );
+  )
+    .then((facility) => {
+      callback(null, facility);
+    })
+    .catch((err) => {
+      callback(err, null);
+    });
 };
 
 const deleteFacility = (id, callback) => {
-  client.query(`DELETE FROM facilities WHERE fac_id = ${id}`, (err, res) => {
-    if (!err) {
-      callback(null, res);
-    } else {
+  Facility.destroy({
+    where: {
+      fac_id: id,
+    },
+  })
+    .then((facility) => {
+      callback(null, facility);
+    })
+    .catch((err) => {
       callback(err, null);
-    }
-  });
+    });
 };
+
 module.exports = {
   getAllFacilities,
   getFacilityById,
   addNewFacility,
   updateFacility,
-  deleteFacility
+  deleteFacility,
 };

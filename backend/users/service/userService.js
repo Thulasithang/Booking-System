@@ -5,17 +5,17 @@ const userRepository = require("../repository/userRepository");
 
 const registerUser = async(user, callback) => {
   try {
-    console.log("user: ", user.email);
-    const userExists = await userRepository.getUserByEmail(user.email);
-    console.log("userExists: ", userExists);
+    const userExists = await userRepository.getUserByEmail(user.email); //Check if user already exists
     if (userExists) {
       console.log("User already exists");
       callback(null, "User already exists");
       return;
     }
-    const salt = bcrypt.genSaltSync(10);
-    const Hash = bcrypt.hashSync(user.password, salt);
+    // Hashing the password
+    const salt = bcrypt.genSaltSync(10); 
+    const Hash = bcrypt.hashSync(user.password, salt); 
 
+    //Creating new user object
     const newUser = {
       username: user.username,
       gender: user.gender,
@@ -27,6 +27,7 @@ const registerUser = async(user, callback) => {
       passwordSalt: salt,
     };
 
+    //Adding new user to the database
     await userRepository.addNewUser(newUser, (err, createdUser) => {
       if (!err) {
         console.log("createdUser: ", createdUser);
