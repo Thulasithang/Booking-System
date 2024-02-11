@@ -1,5 +1,5 @@
 // const pool = require("../dbConnection");
-const { pool, getClient } = require("../dbConnection");
+// const { pool, getClient } = require("../dbConnection");
 const UserAccount = require("../models/userAccount");
 const UserLoginInfo = require("../models/userLoginInfo");
 const sequelize = require("../dbConfig");

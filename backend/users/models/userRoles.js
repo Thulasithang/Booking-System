@@ -32,8 +32,10 @@ const UserRoles = sequelize.define(
     }
 );
 
-UserRoles.belongsToMany(Permissions, {
-    through: UserRolePermissions,
-});
+UserRoles.associations = () => {
+    UserRoles.belongsToMany(Permissions, {
+        through: UserRolePermissions,
+    });
+};
 
 module.exports = UserRoles;
