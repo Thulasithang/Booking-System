@@ -36,6 +36,10 @@ const UserAccount = sequelize.define(
     role_id: {
       type: DataTypes.SMALLINT,
       allowNull: false,
+      references: {
+        model: 'user_roles',
+        key: 'role_id'
+      }
     },
   },
   {

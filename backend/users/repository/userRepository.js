@@ -20,6 +20,16 @@ const getUserByEmail = async (email) => {
   }
 };
 
+const getUserById = async (userId) => {
+  try {
+    const user = await UserAccount.findOne({ where: { user_id: userId } });
+    return user;
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+};
+
 // const addNewUser = async (newUser, callback) => {
 //   const poolClient = await pool.connect();
 //   try {
@@ -81,7 +91,7 @@ const addNewUser = async (newUser, callback) => {
   } catch (error) {
     await t.rollback();
 
-    callback(err, null);
+    callback(error, null);
   }
 };
 

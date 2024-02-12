@@ -1,7 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../dbConfig');
-const Permissions = require('./permissions');
-const UserRolePermissions = require('./userRolePermissions');
 
 const UserRoles = sequelize.define(
     "user_roles",
@@ -15,7 +13,8 @@ const UserRoles = sequelize.define(
         title: {
             type: DataTypes.STRING(50),
             allowNull: false,
-            notEmpty: true,
+            // notEmpty: true,
+            unique: true
         },
         active: {
             type: DataTypes.BOOLEAN,
@@ -32,10 +31,10 @@ const UserRoles = sequelize.define(
     }
 );
 
-UserRoles.associations = () => {
-    UserRoles.belongsToMany(Permissions, {
-        through: UserRolePermissions,
-    });
-};
+// UserRoles.associate = (models) => {
+//     UserRoles.belongsToMany(models.Permissions, {
+//         through: models.UserRolePermissions,
+//     });
+// };
 
 module.exports = UserRoles;

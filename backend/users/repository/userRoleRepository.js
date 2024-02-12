@@ -11,6 +11,24 @@ const getAllUserRoles = async () => {
     }
 };
 
+const addNewUserRole = async (newRole, callback) => {
+    try {
+        console.log(newRole.active);
+    const addedRole = await UserRoles.create(
+        {
+            title: newRole.title,
+            active: newRole.active
+        }
+    );
+    console.log("New User role: ", addedRole );
+    callback(null, addedRole);
+    } catch (error) {
+        callback(error, null);
+    }
+};
+
+
 module.exports = {
-    getAllUserRoles
+    getAllUserRoles,
+    addNewUserRole
 };

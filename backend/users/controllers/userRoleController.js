@@ -17,4 +17,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/add", async (req, res) => {
+  try {
+    await userRoleService.addNewUserRole(req.body, (err, newUserRole) => {
+      if (!err) {
+        res.status(201).json(newUserRole);
+      } else {
+        res.status(500).json({ message: err.message });
+      }
+    });
+  } catch (error) {
+    res.status(500).json("Error adding new role not from here");
+  }
+});
+
 module.exports = router;

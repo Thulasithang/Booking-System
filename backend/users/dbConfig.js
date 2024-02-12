@@ -10,7 +10,8 @@ const sequelize = new Sequelize('users', 'postgres', '1234', {
     host: process.env.HOST,
     dialect: 'postgres',
     define: {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 });
 

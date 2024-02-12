@@ -14,6 +14,9 @@ const UserLoginInfo = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: false,
       notEmpty: true,
+      validate: {
+        isEmail: true,
+      }
     },
     password_hash: {
       type: DataTypes.STRING(100),
