@@ -14,6 +14,7 @@ const Permissions = sequelize.define(
             type: DataTypes.STRING(50),
             allowNull: false,
             notEmpty: true,
+            unique: true,
         },
         active: {
             type: DataTypes.BOOLEAN,

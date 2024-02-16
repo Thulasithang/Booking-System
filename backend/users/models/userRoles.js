@@ -24,6 +24,7 @@ const UserRoles = sequelize.define(
         created_at: {
             type: DataTypes.DATE,
             allowNull: false,
+            defaultValue: DataTypes.NOW,
         }
     },
     {

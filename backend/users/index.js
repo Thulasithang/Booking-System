@@ -51,3 +51,11 @@ Permissions.associate = () => {
 //   }
 // })();
 
+// Permissions.sync({ alter: true })
+//   .then(() => {
+//     console.log("UserRoles table created successfully");
+//   })
+//   .catch((error) => {
+//     console.error("Error creating UserRoles table:", error);
+//   });
+
