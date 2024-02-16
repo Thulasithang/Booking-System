@@ -94,8 +94,7 @@ const updatePermission = async (id, permission, callback) => {
 const addRolePermission = async (permissionList, role_id, callback) => {
   try {
     const existsList = [];
-    permissionList.forEach(async (list_permission_id) => {
-      console.log("Permission id from repo: ", list_permission_id);
+    for ( const list_permission_id of permissionList) {
       const [rolePermission, created] = await UserRolePermissions.findOrCreate({
         where: {
           role_id: role_id,
@@ -106,25 +105,17 @@ const addRolePermission = async (permissionList, role_id, callback) => {
           permission_id: list_permission_id,
         },
       });
-      console.log("Role Permission: ", rolePermission, "Created: ", created);
       if (created) {
         console.log(
           `Permission ${list_permission_id} was added to role ${role_id}`
         );
+        existsList.push(`Permission ${list_permission_id} was added to role ${role_id}`);
       } else if (!created) {
-        console.log(
-          `Permission ${list_permission_id} already exists for role ${role_id}`
-          );
           existsList.push(`Permission ${list_permission_id} already exists for role ${role_id}`);
-          console.log("added to list");
       }
-    });
-    console.log("Exists list: ", existsList);
-    if (existsList.length === 0) {
-      callback(null, `Permissions added to role ${role_id} successfully`);
-      return;
-    }
-    callback(null, existsList);
+    };
+      callback(null, existsList);
+
   } catch (error) {
     console.log("Error: ", error);
     callback(error, null);
