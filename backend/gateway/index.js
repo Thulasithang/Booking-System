@@ -18,4 +18,4 @@ app.listen(PORT, () => {
     console.log(`Gateway service started on port ${PORT}`);
 });
 
-
+// TODO 404

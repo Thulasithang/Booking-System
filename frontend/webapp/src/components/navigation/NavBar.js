@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,34 +13,55 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useTheme } from '@emotion/react';
+import { Divider, useMediaQuery } from '@mui/material';
+import NavBarDesktop from './NavBarDesktop';
+import NavBarMobile from './NavBarMobile';
+import { NavBarPages } from '../../'
+import {  NavBarContainer } from '../../styles/navigation';
 
-const pages = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: 'about' },
-]
+// const pages = [
+//   { name: 'Home', href: '/' },
+//   { name: 'About', href: 'about' },
+// ]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  // const [anchorElNav, setAnchorElNav] = React.useState(null);
+  // const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  // const handleOpenNavMenu = (event) => {
+  //   setAnchorElNav(event.currentTarget);
+  // };
+  // const handleOpenUserMenu = (event) => {
+  //   setAnchorElUser(event.currentTarget);
+  // };
+
+  // const handleCloseNavMenu = () => {
+  //   setAnchorElNav(null);
+  // };
+
+  // const handleCloseUserMenu = () => {
+  //   setAnchorElUser(null);
+  // };
 
   return (
-    <AppBar position="static">
+    <>
+    {isMobile ? <NavBarMobile isMobile={isMobile} /> : <NavBarDesktop isMobile={isMobile}/>}
+    
+    </>
+  );
+}
+export default ResponsiveAppBar;
+
+
+
+{/* <AppBar position="static">
       <Container maxWidth="xl" sx={{width:"90%"}}>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -160,7 +182,4 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
-  );
-}
-export default ResponsiveAppBar;
+    </AppBar> */}
