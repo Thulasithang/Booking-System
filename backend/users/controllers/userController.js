@@ -20,7 +20,9 @@ router.post("/register", async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json("Error registering user not from here" + error.message);
+    res
+      .status(500)
+      .json("Error registering user not from here" + error.message);
   }
 });
 
@@ -28,9 +30,22 @@ router.post("/login", async (req, res) => {
   try {
     await userService.loginUser(req.body, (err, user) => {
       if (!err) {
-        res.status(200).json('Welcome Back ' + user.user_name);
+        if (user === 401){
+          res.status(200).json({ status:401, message: "Incorrect Password" });
+          return;
+        }
+        else if (user.status === 200) {
+          res.status(200).json(user);
+          console.log("correct user from controller: ", user);
+          return;
+        }
       } else {
-        res.status(500).json({ message: err.message });
+        console.log(err);
+        if (err === 404) {
+          res.status(200).json({ status:404, message: "User Not Found" });
+        } else {
+          res.status(500).json({ message: err.message });
+        }
       }
     });
   } catch (error) {

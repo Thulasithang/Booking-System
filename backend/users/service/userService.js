@@ -48,22 +48,24 @@ const loginUser = async (user, callback) => {
   try {
     const userExists = await userRepository.getUserByEmail(user.email);
     if (userExists === null) {
-      callback(null, "User does not exist");
+      console.log("user doesn't exist from user service")
+      callback(404, null);
       return;
     } 
+    console.log("came after if")
     console.log("user password: ", user.password);
     console.log("userExists.password_hash: ", userExists);
     const validPassword = await bcrypt.compare(user.password, userExists.password_hash);
     console.log("validPassword: ", validPassword);
     if (!validPassword) {
-      callback(null, "Invalid password");
+      callback(null, 401);
       return;
     }
 
     await userRepository.updateLastLogin(userExists.user_id, (err, updatedUser) => {
       if (!err) {
         console.log("updatedUser from : ", updatedUser);
-        callback(null, updatedUser);
+        callback(null, { status: 200, user: updatedUser});
       } else {
         console.log("Error updating last login: ", err.message);
         callback(err, null);

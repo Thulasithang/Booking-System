@@ -1,5 +1,6 @@
 export const Data = [
     {
+        fac_id: 1,
         facility: "Swimming",
         image: "/images/main-swimming.jpg",
         alt: "Swimming Pool Image", 
@@ -11,6 +12,7 @@ export const Data = [
         ],
     },
     {
+        fac_id: 2,
         facility: "Badminton",
         image: "/images/main-badminton.jpg",
         alt: "Badminton Court Image",  
@@ -22,6 +24,7 @@ export const Data = [
         ],
     },
     {
+        fac_id: 3,
         facility: "Cricket",
         image: "/images/main-cricket.jpg",
         alt: "Cricket Ground Image",

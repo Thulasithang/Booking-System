@@ -24,10 +24,16 @@ const pages = [
 ];
 
 export default function NavBarDesktop({isMobile}) {
+
+  const navigate = useNavigate();
+  const handleNavigation = () => {
+    navigate("/");
+  };
+
   return (
     <NavBarContainer>
-      <NavBarLogo src="/images/logo.gif" alt="logo" />
-      <NavBarHeader variant="h2"> Facility System </NavBarHeader>
+      <NavBarLogo src="/images/logo.gif" alt="logo"/>
+      <NavBarHeader variant="h2"onClick={handleNavigation}> Facility System </NavBarHeader>
       <Actions isMobile={isMobile}/>
     </NavBarContainer>
   );

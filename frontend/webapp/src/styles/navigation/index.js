@@ -10,11 +10,10 @@ export const NavBarContainer = styled(Box) (({theme}) => ({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    padding: '10px 20px',
     background: Colors.secondary,
     [theme.breakpoints.down('md')]: {
         justifyContent: 'space-between',
-        padding: '10px 20px 10px 0px',
+        padding: '10px 0px 10px 0px',
     },
 }));
 
@@ -41,8 +40,9 @@ export const NavBarHeader = styled(Typography) (({theme}) => ({
 
 export const NavBarList = styled(List) (({type, theme}) => ({
     display: type ==='row' ? 'flex' : 'block',
-    flexGrow: 3,
-    justifyContent: 'center',
+    flexGrow: 1,
+    alignSelf: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     [theme.breakpoints.down('md')]: {
         display: 'none',

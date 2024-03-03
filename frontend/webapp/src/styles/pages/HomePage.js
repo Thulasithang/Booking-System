@@ -73,7 +73,7 @@ export const ItemContainer = styled(Box, {
 export const ItemDescription = styled(Typography) (({theme}) => ({
     color: Colors.dim_grey,
     fontFamily: "'merriweather', cursive",
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: '1rem',
     fontWeight: 'lighter',
     maxWidth: '60%',

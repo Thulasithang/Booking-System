@@ -9,8 +9,8 @@ import theme from "./styles/theme";
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <Router>
+      <NavBar />
         <Routes>
           {routes.map((route) => (
             <Route key={route.id} path={route.path} element={route.element} />
