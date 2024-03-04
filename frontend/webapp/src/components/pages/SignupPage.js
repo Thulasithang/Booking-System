@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Box, TextField, MenuItem, Stack, FormHelperText } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, TextField, MenuItem, Stack, FormHelperText, Grid } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -174,6 +174,18 @@ export default function SignUpPage() {
             <SubmitButton type="submit" fullWidth>
               Sign Up
             </SubmitButton>
+            <Grid container>
+              {/* <Grid item xs>
+                <Link to={"/"} variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid> */}
+              <Grid item>
+                <Link to={"/login"} variant="body2">
+                  Already have an account? LogIn
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
         </FormContainer>
       </MainContainer>
