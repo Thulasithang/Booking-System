@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 
 const userRepository = require("../repository/userRepository");
+const userRoleRepository = require("../repository/userRoleRepository");
 
 const registerUser = async (user, callback) => {
   try {
@@ -16,26 +17,35 @@ const registerUser = async (user, callback) => {
     const Hash = bcrypt.hashSync(user.password, salt);
     console.log("came here after hash");
 
+    // console.log("user role: ", user.role)
+    const getUserRole = await userRoleRepository.getUserRole( user.role || "member"); //get user role id for role or default member
+    if (getUserRole === null) {
+      console.log("Role doesn't exist");
+      callback(null, "Role doesn't exist");
+      return;
+    }
+    const roleId = getUserRole.role_id;
+    console.log("getUserRole: ", roleId);
     //Creating new user object
     const newUser = {
       username: user.username,
       gender: user.gender,
       date_of_birth: user.date_of_birth,
       mobile: user.mobile,
-      role_id: user.role_id,
+      role_id: roleId,
       email: user.email,
       passwordHash: Hash,
       passwordSalt: salt,
     };
-    console.log("created newUser");
-    //Adding new user to the database
+    console.log("created newUser: ", newUser);
+    // Adding new user to the database
     await userRepository.addNewUser(newUser, (err, createdUser) => {
       if (!err) {
         console.log("createdUser: ", createdUser);
-        callback(null, "User registered successfully");
+        callback(null, { status: 200, user: createdUser });
       } else {
         console.log("Error registering user from else: ", err.message); //Shows error if table name is incorrect
-        callback(err, null);
+        callback(500, null);
       }
     });
   } catch (error) {

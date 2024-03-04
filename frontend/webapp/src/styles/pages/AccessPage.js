@@ -1,8 +1,8 @@
-import { Box, Container, FormControl, Typography, styled } from "@mui/material";
+import { Box, Button, Container, FormControl, Typography, styled } from "@mui/material";
 import "@fontsource/merriweather";
 import { Colors } from "../theme";
 
-export const LoginPageContainer = styled(Container) (({theme}) => ({
+export const AccessPageContainer = styled(Container) (({theme}) => ({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
@@ -55,9 +55,19 @@ export const FormContainer = styled(Box) (({theme}) => ({
     [theme.breakpoints.down('md')]: {
         width: '100%',
         maxWidth: '100%',
-        padding: '10px 0px',
+        padding: '10px 20px',
+        borderRadius: '10px',
         },
 }));
 
 export const Form = styled(FormControl) (({theme}) => ({
+}));
+
+export const SubmitButton = styled(Button) (() => ({
+    margin: '20px 0',
+    background: Colors.primary,
+    color: 'white',
+    '&:hover': {
+        background: Colors.primary_dark,
+    },
 }));

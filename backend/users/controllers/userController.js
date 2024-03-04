@@ -14,7 +14,9 @@ router.post("/register", async (req, res) => {
     await userService.registerUser(req.body, (err, registeredUser) => {
       if (!err) {
         console.log("registeredUser: ", registeredUser);
-        res.status(200).json(registeredUser);
+        if (registeredUser.status === 200) {
+        res.status(200).json("User registered successfully");
+        }
       } else {
         res.status(500).json({ message: err.message });
       }

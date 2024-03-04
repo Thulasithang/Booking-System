@@ -5,27 +5,22 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormHelperText,
   Grid,
-  Input,
-  InputLabel,
   TextField,
 } from "@mui/material";
 import {
-  Form,
+  AccessPageContainer,
   FormContainer,
   ImageContainer,
-  LoginPageContainer,
   MainContainer,
+  SubmitButton,
   TitleText,
-} from "../../styles/pages/LoginPage";
+} from "../../styles/pages/AccessPage";
 
 export default function LoginPage() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [loginError, setLoginError] = useState(false);
@@ -67,7 +62,10 @@ export default function LoginPage() {
             console.log("came into responses");
             console.log("response", response);
             console.log("response status", response.data.status);
-            if (response.data.status === 404 && response.data.message === "User Not Found") {
+            if (
+              response.data.status === 404 &&
+              response.data.message === "User Not Found"
+            ) {
               setEmailError(true);
               setErrorMessage("User not found");
               console.log("email error");
@@ -96,7 +94,7 @@ export default function LoginPage() {
   };
 
   return (
-    <LoginPageContainer>
+    <AccessPageContainer>
       <MainContainer>
         <ImageContainer src="/images/login-image.jpg" alt="login" />
         <FormContainer>
@@ -167,16 +165,19 @@ export default function LoginPage() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
+            <SubmitButton
               type="submit"
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              // variant="contained"
+              // sx={{ mt: 3, mb: 2 }}
             >
               Sign In
-            </Button>
+            </SubmitButton>
             {loginError && (
-              <FormHelperText error sx={{textAlign: "center", fontWeight:"bold", fontSize: 14}}>
+              <FormHelperText
+                error
+                sx={{ textAlign: "center", fontWeight: "bold", fontSize: 14 }}
+              >
                 Login failed. Please try again.
               </FormHelperText>
             )}
@@ -195,6 +196,6 @@ export default function LoginPage() {
           </Box>
         </FormContainer>
       </MainContainer>
-    </LoginPageContainer>
+    </AccessPageContainer>
   );
 }

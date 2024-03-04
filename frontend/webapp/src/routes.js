@@ -5,6 +5,7 @@ import ErrorPage from "./components/pages/ErrorPage";
 import FacilitiesPage from "./components/pages/FacilitiesPage";
 import BookingPage from "./components/pages/BookingPage";
 import LoginPage from "./components/pages/LoginPage";
+import SignUpPage from "./components/pages/SignupPage";
 // import ContactPage from "./components/pages/ContactPage";
 
 const routes = [
@@ -31,7 +32,7 @@ const routes = [
     {
         id: 5,
         path: "/signup",
-        element: <h1>Sign Up</h1>,
+        element: <SignUpPage />,
     },
     {
         id: 6,

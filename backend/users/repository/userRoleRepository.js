@@ -13,6 +13,15 @@ const getAllUserRoles = async () => {
   }
 };
 
+const getUserRole = async (role) => {
+  try {
+    const userRole = await UserRoles.findOne({ where: { title: role } });
+    return userRole;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addNewUserRole = async (newRole, callback) => {
   try {
     const roleExists = await UserRoles.findOne({
@@ -130,4 +139,5 @@ module.exports = {
   addNewPermission,
   updatePermission,
   addRolePermission,
+  getUserRole,
 };
