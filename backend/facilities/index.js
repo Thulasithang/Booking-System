@@ -10,8 +10,10 @@ const Coaches = require('./models/coaches');
 
 app.use(express.json());
 
-// const facilityController = require("./controllers/facilityController");
-// app.use("/", facilityController);
+
+
+const facilityController = require("./controllers/facilityController");
+app.use("/", facilityController);
 
 app.listen(PORT,  () => {
     console.log(`facilites service started on port ${PORT}`);
@@ -27,3 +29,4 @@ app.listen(PORT,  () => {
 //         console.error("Error syncing database:", error);
 //       }
 //     })();
+

@@ -18,12 +18,12 @@ const FacilityType = sequelize.define(
       notEmpty: true,
     },
     small_description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       notEmpty: true,
     },
     large_description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       notEmpty: true,
     },

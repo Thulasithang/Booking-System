@@ -1,5 +1,6 @@
 const { where } = require("sequelize");
-const Facility = require("../models/facility");
+const Facility = require("../models/facilities");
+const FacilityType = require("../models/facilityType");
 
 const getAllFacilities = (callback) => {
   Facility.findAll()
@@ -10,6 +11,39 @@ const getAllFacilities = (callback) => {
       callback(err, null);
       console.log(err);
     });
+};
+
+const findFacilityTypeByName = async (name) => {
+  try {
+    const result = await FacilityType.findOne({
+      where: {
+        type_name: name,
+      },
+    });
+    if (result) {
+      return result;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log("Error getting facility type by name: ", error);
+    throw error;
+  }
+};
+
+const addNewFacilityType = async (facilityType, callback) => {
+  try {
+    const newFacilityType = await FacilityType.create({
+      type_name: facilityType.type_name,
+      small_description: facilityType.small_description,
+      large_description: facilityType.large_description,
+    });
+    // console.log("facilityType: ", facilityType);
+    callback(null, newFacilityType);
+  } catch (error) {
+    console.log("Error adding new facility type: ", error);
+    throw error;
+  }
 };
 
 const getFacilityById = (id, callback) => {
@@ -24,7 +58,7 @@ const getFacilityById = (id, callback) => {
 
 const addNewFacility = (fac_id, type, available, price_per_hour, callback) => {
   Facility.create({
-    fac_id: fac_id, 
+    fac_id: fac_id,
     type: type,
     available: available,
     price_per_hour: price_per_hour,
@@ -73,9 +107,12 @@ const deleteFacility = (id, callback) => {
 };
 
 module.exports = {
-  getAllFacilities,
-  getFacilityById,
-  addNewFacility,
-  updateFacility,
-  deleteFacility,
+  // getAllFacilities,
+  // getFacilityById,
+  // addNewFacility,
+  // updateFacility,
+  // deleteFacility,
+  // getFacilityTypeByName,
+  findFacilityTypeByName,
+  addNewFacilityType,
 };

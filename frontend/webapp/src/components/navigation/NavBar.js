@@ -19,6 +19,7 @@ import NavBarDesktop from './NavBarDesktop';
 import NavBarMobile from './NavBarMobile';
 import { NavBarPages } from '../../'
 import {  NavBarContainer } from '../../styles/navigation';
+import { Outlet } from 'react-router-dom';
 
 // const pages = [
 //   { name: 'Home', href: '/' },
@@ -53,7 +54,7 @@ function ResponsiveAppBar() {
   return (
     <>
     {isMobile ? <NavBarMobile isMobile={isMobile} /> : <NavBarDesktop isMobile={isMobile}/>}
-    
+    <Outlet/>
     </>
   );
 }

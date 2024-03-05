@@ -54,11 +54,11 @@ const routes = [
         path: "/error",
         element: <ErrorPage />,
     },
-    {
-        id: 10,
-        path: "*",
-        element:<h1>404 NOT FOUND!</h1>,
-    }
+    // {
+    //     id: 10,
+    //     path: "*",
+    //     element:<h1>404 NOT FOUND!</h1>,
+    // },
     ];
 
     export default routes;
