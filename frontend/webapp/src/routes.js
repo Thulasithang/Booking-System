@@ -41,7 +41,7 @@ const routes = [
     },
     {
         id: 7,
-        path: "/book/:id",
+        path: "/book/:type_id",
         element: <BookingPage />,
     },
     {

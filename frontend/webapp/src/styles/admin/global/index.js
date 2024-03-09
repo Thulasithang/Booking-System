@@ -1,4 +1,4 @@
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, Typography, styled } from "@mui/material";
 import { Colors } from "../../theme";
 
 export const MainContainer = styled(Box)(() => ({
@@ -57,8 +57,58 @@ export const ModalForm = styled(Box)(() => ({
 
 export const ModalField = styled(Typography)(() => ({
     color: Colors.black,
-    fontFamily: "'merriweather', cursive",
+    // fontFamily: "'merriweather', cursive",
     fontSize: '1rem',
     fontWeight: 'bold',
     textAlign: 'left',
+}));
+
+export const DialogContainer = styled(Dialog)(() => ({
+  maxWidth: '100%',
+  fullWidth: true,
+}));
+
+export const DialogHeader = styled(DialogTitle)(() => ({
+  color: Colors.primary,
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  padding: '5px 20px',
+}));
+
+export const CancelButton = styled(Button)(() => ({
+  fontWeight: 'bold',
+  fontFamily: "'Righteous', cursive",
+  padding: '10px 20px',
+  borderRadius: '10px',
+  color: Colors.danger,
+  "&:hover": {
+    background: Colors.danger,
+    color: Colors.white,
+  },
+}));
+
+export const AddButton = styled(Button)(() => ({
+  fontWeight: 'bold',
+  fontFamily: "'Righteous', cursive",
+  padding: '10px 20px',
+  borderRadius: '10px',
+  background: Colors.primary,
+}));
+
+export const TimeTableContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignContent: 'center',
+  padding: '10px 0px',
+  height: '100%',
+}));
+
+export const TimePickerContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignContent: 'center',
+  maxWidth: '60%',
+  maxHeight: 50,
 }));

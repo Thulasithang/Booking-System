@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Dialog, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import { Colors } from "../../theme";
 
@@ -31,4 +31,9 @@ export const ActionButton = styled(Button)(() => ({
     fontFamily: "'Righteous', cursive",
     padding: '10px 20px',
     borderRadius: '10px',
+}));
+
+export const DialogContainer = styled(Dialog)(() => ({
+    maxWidth: '100%',
+    width: '100%',
 }));

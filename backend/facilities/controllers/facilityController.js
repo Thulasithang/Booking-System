@@ -6,14 +6,37 @@ const facilityService = require("../service/facilityService");
 //Need to check for errors
 
 router.get("/", (req, res) => {
-  facilityRepository.getAllFacilities((err, facilities) => {
-    if (!err) {
-      res.status(200).json(facilities);
-    } else {
-      console.log(err);
-      res.status(500).json("Error fetching facilities");
-    }
-  });
+  try {
+    const type_id = req.query.type_id ? req.query.type_id : null;
+      facilityService.getAllFacilitiesForType(type_id, (err, facilities) => {
+        if (!err) {
+          res.status(200).json(facilities);
+        } else {
+          console.log(err);
+          res.status(500).json("Error fetching facilities");
+        }
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error fetching facilities");
+  }
+});
+
+router.get("/type", (req, res) => {
+  try {
+    const columns = req.query.fields ? req.query.fields : null;
+    facilityService.getAllFacilityTypes(columns, (err, facilityTypes) => {
+      if (!err) {
+        res.status(200).json(facilityTypes);
+      } else {
+        console.log(err);
+        res.status(500).json("Error fetching facility types");
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error fetching facility types");
+  }
 });
 
 router.get("/:id", (req, res) => {
@@ -46,32 +69,48 @@ router.get("/:id", (req, res) => {
 //   );
 // });
 
-router.post ("/type/add", async (req, res) => {
+router.post("/type/add", async (req, res) => {
   facilityService.addNewFacilityType(req.body, (err, newFacilityType) => {
-    console.log("newFacilityType from controller: ", newFacilityType)
+    console.log("newFacilityType from controller: ", newFacilityType);
     if (!err) {
       if (newFacilityType.status === 200) {
-        res.status(200).json({ status: 200, message: "Facility Type added successfully" });
+        res
+          .status(200)
+          .json({ status: 200, message: "Facility Type added successfully" });
         return;
       } else if (newFacilityType.status === 409) {
-        res.status(200).json({ status: 409, message: "Facility Type already exists" });
+        res
+          .status(200)
+          .json({ status: 409, message: "Facility Type already exists" });
       }
     } else {
       console.log(err);
       res.status(500).json("Error adding new Facility Type");
     }
-  })
+  });
 });
 
-router.post("/add", async (req, res) => { //TODO: Add array of images
+// Add a New Facility
+router.post("/add", async (req, res) => {
+  //TODO: Add array of images
+  // console.log("req.body: ", req.body);
   facilityService.addNewFacility(req.body, (err, newFacility) => {
     if (!err) {
-      res.status(200).json(newFacility);
+      if (newFacility.status === 200) {
+        res
+          .status(200)
+          .json({ status: 200, message: "Facility added successfully" });
+        return;
+      } else if (newFacility.status === 409) {
+        res
+          .status(200)
+          .json({ status: 409, message: "Facility already exists" });
+      }
     } else {
       console.log(err);
       res.status(500).json("Error adding new Facility");
     }
-  })
+  });
 });
 
 router.put("/:id", async (req, res) => {

@@ -2,15 +2,33 @@ const { where } = require("sequelize");
 const Facility = require("../models/facilities");
 const FacilityType = require("../models/facilityType");
 
-const getAllFacilities = (callback) => {
-  Facility.findAll()
-    .then((facilities) => {
-      callback(null, facilities);
-    })
-    .catch((err) => {
-      callback(err, null);
-      console.log(err);
-    });
+const getAllFacilities = async () => {
+  try {
+    const facilitiesList = await Facility.findAll();
+    return facilitiesList;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+const getAllFacilitiesByTypeId = async (type_id) => {
+  try {
+    if (type_id) {
+      const facilitiesList = await Facility.findAll({
+        where: {
+          type_id: type_id,
+        },
+      });
+      return facilitiesList;
+    } else {
+      const facilitiesList = await Facility.findAll();
+      return facilitiesList;
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 const findFacilityTypeByName = async (name) => {
@@ -46,6 +64,20 @@ const addNewFacilityType = async (facilityType, callback) => {
   }
 };
 
+const getAllFacilityTypes = async (columns) => {
+  try {
+    console.log("columns: ", columns ? columns : undefined);
+    const facilityTypes = await FacilityType.findAll({
+      attributes: columns ? columns : undefined,
+    });
+    console.log("facilityTypes: ", facilityTypes);
+    return facilityTypes;
+  } catch (error) {
+    console.log("Error getting all facility types: ", error);
+    throw error;
+  }
+};
+
 const getFacilityById = (id, callback) => {
   Facility.findByPk(id)
     .then((facility) => {
@@ -56,12 +88,19 @@ const getFacilityById = (id, callback) => {
     });
 };
 
-const addNewFacility = (fac_id, type, available, price_per_hour, callback) => {
+const addNewFacility = async (facility, callback) => {
   Facility.create({
-    fac_id: fac_id,
-    type: type,
-    available: available,
-    price_per_hour: price_per_hour,
+    type_id: facility.type_id,
+    facility_name: facility.facility_name,
+    max_users: facility.max_users,
+    price_per_hour: facility.price_per_hour,
+    monday: facility.monday,
+    tuesday: facility.tuesday,
+    wednesday: facility.wednesday,
+    thursday: facility.thursday,
+    friday: facility.friday,
+    saturday: facility.saturday,
+    sunday: facility.sunday,
   })
     .then((facility) => {
       callback(null, facility);
@@ -107,12 +146,15 @@ const deleteFacility = (id, callback) => {
 };
 
 module.exports = {
-  // getAllFacilities,
-  // getFacilityById,
+  getAllFacilities,
+  getFacilityById,
+  getAllFacilitiesByTypeId,
   // addNewFacility,
   // updateFacility,
   // deleteFacility,
   // getFacilityTypeByName,
   findFacilityTypeByName,
   addNewFacilityType,
+  getAllFacilityTypes,
+  addNewFacility,
 };

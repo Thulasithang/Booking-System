@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "runOptions": {
+                "runOn": "default"
+            },
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "webapp",
+                "gateway",
+                "facilities",
+            ]
+        },
+        {
+            "label": "webapp",
+            "type": "shell",
+            "command": "cd ./frontend/webapp ; npm start",
+            "presentation": {
+                "panel": "dedicated",
+            }
+        },
+        {
+            "label": "gateway",
+            "type": "shell",
+            "command": "cd ./backend/gateway ; npm start",
+            "presentation": {
+                "panel": "dedicated",
+            }
+        },
+        {
+            "label": "facilities",
+            "type": "shell",
+            "command": "cd ./backend/facilities ; npm start",
+            "presentation": {
+                "panel": "dedicated",
+            }
+        },
+    ]
+}
+
+//https://stackoverflow.com/questions/60621321/create-multiple-terminals-and-run-commands-in-vscode
