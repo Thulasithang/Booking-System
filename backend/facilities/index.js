@@ -15,6 +15,9 @@ app.use(express.json());
 const facilityController = require("./controllers/facilityController");
 app.use("/", facilityController);
 
+const facilityTimeTableController = require("./controllers/facilityTimeTableController");
+app.use("/tt", facilityTimeTableController);
+
 app.listen(PORT,  () => {
     console.log(`facilites service started on port ${PORT}`);
 });

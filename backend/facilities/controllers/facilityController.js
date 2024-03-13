@@ -8,14 +8,14 @@ const facilityService = require("../service/facilityService");
 router.get("/", (req, res) => {
   try {
     const type_id = req.query.type_id ? req.query.type_id : null;
-      facilityService.getAllFacilitiesForType(type_id, (err, facilities) => {
-        if (!err) {
-          res.status(200).json(facilities);
-        } else {
-          console.log(err);
-          res.status(500).json("Error fetching facilities");
-        }
-      });
+    facilityService.getAllFacilitiesForType(type_id, (err, facilities) => {
+      if (!err) {
+        res.status(200).json(facilities);
+      } else {
+        console.log(err);
+        res.status(500).json("Error fetching facilities");
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json("Error fetching facilities");
@@ -113,19 +113,41 @@ router.post("/add", async (req, res) => {
   });
 });
 
+// router.put("/:id", async (req, res) => {
+//   facilityRepository.updateFacility(
+//     req.params.id,
+//     req.body.type,
+//     req.body.available,
+//     req.body.price_per_hour,
+//     (err, updatedFacility) => {
+//       if (!err) {
+//         res
+//           .status(200)
+//           .json(
+//             `Facility ${req.body.type} with id = ${req.params.id} has been updated Successfully!`
+//           );
+//       } else {
+//         console.log(err);
+//         res.status(500).json("Error updating Facility");
+//       }
+//     }
+//   );
+// });
+
 router.put("/:id", async (req, res) => {
-  facilityRepository.updateFacility(
+  facilityService.updateFacility(
     req.params.id,
-    req.body.type,
-    req.body.available,
-    req.body.price_per_hour,
+    req.body,
     (err, updatedFacility) => {
       if (!err) {
-        res
-          .status(200)
-          .json(
-            `Facility ${req.body.type} with id = ${req.params.id} has been updated Successfully!`
-          );
+        if (updatedFacility.status === 200) {
+          res
+            .status(200)
+            .json({ status: 200, message: "Facility updated successfully" });
+          return;
+        } else{
+          res.status(500).json("Error updating Facility");
+        }
       } else {
         console.log(err);
         res.status(500).json("Error updating Facility");

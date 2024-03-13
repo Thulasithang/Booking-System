@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   ActionContainer,
   ActionButton,
@@ -8,6 +9,7 @@ import {
   ModalField,
   TimeTableContainer,
   TimePickerContainer,
+  HeadContainer,
 } from "../../styles/admin/global";
 import {
   Box,
@@ -23,7 +25,7 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from "@mui/x-data-grid";
 import Alert from "@mui/material/Alert";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -33,15 +35,16 @@ import dayjs from "dayjs";
 
 export default function ManageFacilities() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
 
   const [typeList, setTypeList] = useState([]);
   const [facilitiesDataList, setFacilitiesDataList] = useState();
   const columns = [
-    {field: 'fac_id', headerName: 'ID', width: 70},
-    { field: 'facility_name', headerName: 'Facility name', width: 130 },
-    { field: 'price_per_hour', headerName: 'Price per Hour', width: 130 },
-    { field: 'monday', headerName: 'Monday', type: 'array', width: 130 },
-  ]
+    { field: "fac_id", headerName: "ID", width: 70 },
+    { field: "facility_name", headerName: "Facility name", width: 130 },
+    { field: "price_per_hour", headerName: "Price per Hour", width: 130 },
+    { field: "monday", headerName: "Monday", type: "array", width: 130 },
+  ];
   const [type, setType] = useState("");
 
   const [open, setOpen] = React.useState(false);
@@ -103,7 +106,7 @@ export default function ManageFacilities() {
   const handleTimeTableOpen = () => setTimeTableOpen(true);
   const handleTimeTableClose = () => setTimeTableOpen(false);
 
-  // In the timetable list, isOpen boolean is made to true and 
+  // In the timetable list, isOpen boolean is made to true and
   // new values for open and close are stored.
   const handleSwitchChange = (index) => (event) => {
     console.log(index, event.target.checked);
@@ -113,7 +116,7 @@ export default function ManageFacilities() {
     console.log(`${timeTable[index].day}: `, timeTable[index].isOpen);
   };
 
-  // open and close times are stored in the correct format. 
+  // open and close times are stored in the correct format.
   const handleTimeChange = (index, type) => (time) => {
     const updatedTimeTable = [...timeTable];
     const formattedTime = dayjs(time).format("HH:mm:ss");
@@ -121,28 +124,35 @@ export default function ManageFacilities() {
     setTimeTable(updatedTimeTable);
   };
 
-  // every time the drop down list to get facility types is clicked, 
-  // the list is rendered from the database. 
-  // List is stored as objects with id and its name. 
-  // The id is sent to the backend with facility data. 
+  const handleRowSelection = (row) => {
+    console.log("row: ", row.row);
+    navigate(`/manage/facilities/${row.id}`, {state: {row: row.row}});
+  };
+
+  // every time the drop down list to get facility types is clicked,
+  // the list is rendered from the database.
+  // List is stored as objects with id and its name.
+  // The id is sent to the backend with facility data.
   const handleSelectOpen = (event) => {
-    axios.get(`${backend_url}type`, {
-      params: {
-        fields: ['type_id', 'type_name'],
-      },
-    }).then((response) => {
-      console.log("response from types: ", response.data);
-      setTypeList([]);
-      for (let i = 0; i < response.data.length; i++) {
-        setTypeList((typeList) => [
-          ...typeList,
-          {
-            type_id: response.data[i].type_id,
-            type_name: response.data[i].type_name,
-          },
-        ]);
-      }
-    });
+    axios
+      .get(`${backend_url}type`, {
+        params: {
+          fields: ["type_id", "type_name"],
+        },
+      })
+      .then((response) => {
+        console.log("response from types: ", response.data);
+        setTypeList([]);
+        for (let i = 0; i < response.data.length; i++) {
+          setTypeList((typeList) => [
+            ...typeList,
+            {
+              type_id: response.data[i].type_id,
+              type_name: response.data[i].type_name,
+            },
+          ]);
+        }
+      });
   };
 
   useEffect(() => {
@@ -154,7 +164,7 @@ export default function ManageFacilities() {
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
-    }
+    };
 
     fetchFacilitiesData();
   }, []);
@@ -162,30 +172,36 @@ export default function ManageFacilities() {
   function getRowId(row) {
     return row.fac_id;
   }
-  
+
   console.log(facilitiesDataList);
   return (
     <MainContainer>
-      <TitleHeader variant="h1">Manage Facilities</TitleHeader>
-      <ActionContainer>
-        <ActionButton variant="contained" onClick={handleOpen}>
-          Add New Facility
-        </ActionButton>
-      </ActionContainer>
-
+      <HeadContainer>
+        <TitleHeader variant="h1">Manage Facilities</TitleHeader>
+        <ActionContainer>
+          <ActionButton variant="contained" onClick={handleOpen}>
+            Add New Facility
+          </ActionButton>
+        </ActionContainer>
+      </HeadContainer>
       {/* Table */}
-      { facilitiesDataList && <DataGrid
-      getRowId={getRowId}
-        columns={columns}
-        rows={facilitiesDataList}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        />}
+      {facilitiesDataList && (
+        <DataGrid
+          getRowId={getRowId}
+          columns={columns}
+          rows={facilitiesDataList}
+          onRowClick={(row) => {
+            handleRowSelection(row);
+          }}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          // checkboxSelection
+        />
+      )}
 
       {/*  */}
       {/* Dialog Box to get opening hours of the facility */}
@@ -343,6 +359,7 @@ export default function ManageFacilities() {
             <Stack direction="column">
               <ModalField variant="h6">Maximum Players</ModalField>
               <TextField
+              type="number"
                 size="small"
                 margin="dense"
                 required
@@ -383,6 +400,7 @@ export default function ManageFacilities() {
             <Stack direction="column">
               <ModalField variant="h6">Price per Hour</ModalField>
               <OutlinedInput
+              type="number"
                 startAdornment="LKR"
                 size="small"
                 margin="dense"

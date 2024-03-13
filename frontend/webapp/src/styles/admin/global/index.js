@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogTitle, Typography, styled } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, Tab, Typography, styled } from "@mui/material";
 import { Colors } from "../../theme";
 
 export const MainContainer = styled(Box)(() => ({
@@ -11,7 +11,17 @@ export const MainContainer = styled(Box)(() => ({
   // padding: '10px 20px',
 }));
 
+export const HeadContainer = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  alignContent: "center",
+  padding: "10px 20px",
+  height: "100%",
+}));
+
 export const TitleHeader = styled(Typography)(() => ({
+  position: "relative",
   color: Colors.primary,
   fontSize: "2rem",
   fontWeight: "bold",
@@ -100,7 +110,7 @@ export const TimeTableContainer = styled(Box)(() => ({
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignContent: 'center',
-  padding: '10px 0px',
+  padding: '10px 10px',
   height: '100%',
 }));
 
@@ -111,4 +121,24 @@ export const TimePickerContainer = styled(Box)(() => ({
   alignContent: 'center',
   maxWidth: '60%',
   maxHeight: 50,
+}));
+
+export const TabContainer = styled(Box)(() => ({
+  display: 'flex',
+  width: '50%',
+  maxWidth: '50%',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignContent: 'center',
+  padding: '10px 10px',
+  height: '100%',
+}));
+
+export const CustomTab = styled(Tab)(() => ({
+  fontFamily: "'Righteous', cursive",
+  color: Colors.primary,
+  "&.Mui-selected": {
+    color: Colors.primary,
+    fontWeight: 'bold',
+  },
 }));

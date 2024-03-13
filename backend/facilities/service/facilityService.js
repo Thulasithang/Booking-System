@@ -96,6 +96,29 @@ const addNewFacility = async (facility, callback) => {
   }
 }
 
+const updateFacility = async (id, facility, callback) => {
+  try {
+    const updates = {
+      facility_name: facility.facility_name,
+      max_users: facility.max_users,
+      price_per_hour: facility.price_per_hour,
+    }
+    console.log("updates: ", updates);
+    await facilityRepository.updateFacility(id, updates, (err, updatedFacility) => {
+      if (!err) {
+        console.log("updated facility from service");
+        callback(null, { status: 200, facility: updatedFacility });
+      } else {
+        console.log(err);
+        callback(500, null);
+      }
+    });
+  } catch(err) {
+    console.log("Error updating facility from catch: ", err);
+    throw err;
+  }
+};
+
 const getAllFacilitiesForType = async (type_id, callback) => {
   try {
     const facilities = await facilityRepository.getAllFacilitiesByTypeId(type_id);
@@ -111,5 +134,6 @@ module.exports = {
   addNewFacilityType,
   getAllFacilityTypes,
   addNewFacility,
-  getAllFacilitiesForType
+  getAllFacilitiesForType,
+  updateFacility,
 };

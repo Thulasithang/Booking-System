@@ -19,17 +19,11 @@ export default function App() {
             {routes.map((route) => (
               <Route key={route.id} path={route.path} element={route.element} />
             ))}
-            ;
           </Route>
           <Route path="/manage" element={<MainContainer />}>
             {AdminRoutes.map((route) => (
               <Route key={route.id} path={route.path} element={route.element} />
             ))}
-            ;
-            <Route
-              path="/manage/facilities"
-              element={<h1>Manage Facilities</h1>}
-            />
           </Route>
           <Route path="*" element={<h1>404 NOT FOUND!</h1>} />
         </Routes>

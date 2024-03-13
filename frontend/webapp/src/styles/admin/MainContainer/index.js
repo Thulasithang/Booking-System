@@ -16,4 +16,5 @@ export const OutletContainer = styled(Box)(() => ({
     maxWidth: '100%',
     width: '100%',
     height: '100%',
+    padding: '10px',
 }));

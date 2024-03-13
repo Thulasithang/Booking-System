@@ -9,6 +9,7 @@ import {
   DialogHeader,
   CancelButton,
   AddButton,
+  HeadContainer,
 } from "../../styles/admin/global";
 import {
   Box,
@@ -62,13 +63,14 @@ export default function ManageFacilityType() {
 
   return (
     <MainContainer>
+      <HeadContainer>
       <TitleHeader variant="h1">Manage Facility Types</TitleHeader>
       <ActionContainer>
         <ActionButton variant="contained" onClick={handleOpen}>
           Add Facility Type
         </ActionButton>
       </ActionContainer>
-
+      </HeadContainer>
       {/* Table */}
 
       {facilityTypeDataList && (

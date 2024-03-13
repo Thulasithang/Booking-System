@@ -88,6 +88,20 @@ const getFacilityById = (id, callback) => {
     });
 };
 
+const checkIfFacilityExists = async (id) => {
+  try {
+    const facility = await Facility.findByPk(id);
+    if (facility) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log("Error checking if facility exists: ", error);
+    throw error;
+  }
+};
+
 const addNewFacility = async (facility, callback) => {
   Facility.create({
     type_id: facility.type_id,
@@ -110,12 +124,12 @@ const addNewFacility = async (facility, callback) => {
     });
 };
 
-const updateFacility = (id, type, available, price_per_hour, callback) => {
+const updateFacility = (id, updates, callback) => {
   Facility.update(
     {
-      type: type,
-      available: available,
-      price_per_hour: price_per_hour,
+      facility_name: updates.facility_name,
+      max_users: updates.max_users,
+      price_per_hour: updates.price_per_hour,
     },
     {
       where: {
@@ -157,4 +171,6 @@ module.exports = {
   addNewFacilityType,
   getAllFacilityTypes,
   addNewFacility,
+  checkIfFacilityExists,
+  updateFacility,
 };
