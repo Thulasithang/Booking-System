@@ -7,7 +7,8 @@ const facilityService = require("../service/facilityService");
 
 router.get("/", (req, res) => {
   try {
-    const type_id = req.query.type_id ? req.query.type_id : null;
+    //Admins require All facilities available, Users require facilities by type
+    const type_id = req.query.type_id ? req.query.type_id : null; 
     facilityService.getAllFacilitiesForType(type_id, (err, facilities) => {
       if (!err) {
         res.status(200).json(facilities);

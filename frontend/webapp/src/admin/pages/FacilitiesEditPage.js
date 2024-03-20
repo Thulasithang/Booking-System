@@ -5,29 +5,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import {
-  ActionButton,
   AddButton,
-  CancelButton,
   CustomTab,
-  HeadContainer,
   MainContainer,
-  ModalContainer,
   ModalField,
-  ModalForm,
   TabContainer,
-  TimeTableContainer,
   TitleHeader,
 } from "../../styles/admin/global";
 import {
   Box,
   Button,
-  Container,
-  Tab,
   Tabs,
-  TabPanel,
   TextField,
-  Typography,
-  Stack,
 } from "@mui/material";
 
 import PropTypes from "prop-types";
@@ -85,16 +74,6 @@ export default function FacilitiesEditPage() {
   const [disableButton, setDisableButton] = useState(false);
   const [dayOfWeek, setDayOfWeek] = useState(value.format("dddd"));
   console.log("dayOfWeek: ", dayOfWeek);
-  const days = [
-    // eslint-disable-next-line no-undef
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -150,7 +129,7 @@ export default function FacilitiesEditPage() {
   const handleDisableTimeSlots = (event) => {
     event.preventDefault();
     axios
-      .post(`${backend_url}tt`, {
+      .post(`${backend_url}tt/disable`, {
         fac_id: id,
         exception_date: value.format("YYYY-MM-DD"),
         removed_slots: timeSlots,

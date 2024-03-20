@@ -9,6 +9,7 @@ import {
   FacilityContainer,
   FacilityContent,
   FacilityImage,
+  MainHeader,
 } from "../../styles/pages/FacilitiesPage";
 import { Data } from "../data/data";
 import axios from "axios";
@@ -40,15 +41,16 @@ useEffect(() => {
   console.log(facilityTypeDataList);
   return (
     <FacilitiesContainer>
-      <Typography variant="h2" align="center">
+      <MainHeader variant="h2" >
         Our Facilities
-      </Typography>
+      </MainHeader>
       { facilityTypeDataList && facilityTypeDataList.map((facility, index) => {
+        let facilityName = facility.type_name.charAt(0).toUpperCase() + facility.type_name.slice(1);
         return (
           <FacilityContainer direction={index % 2 !== 0 ? "left" : "right"}>
             <FacilityImage src='./images/main-swimming.jpg' alt={facility.alt} />
             <FacilityContent>
-              <ContentHeader variant="h3">{facility.type_name}</ContentHeader>
+              <ContentHeader variant="h3">{facilityName}</ContentHeader>
               <ContentDescription>{facility.small_description}</ContentDescription>
               <FacilityBookButton
                 variant="contained"

@@ -143,7 +143,7 @@ export default function ManageFacilities() {
       .then((response) => {
         console.log("response from types: ", response.data);
         setTypeList([]);
-        for (let i = 0; i < response.data.length; i++) {
+        for (let i = 0; i < response.data?.length; i++) {
           setTypeList((typeList) => [
             ...typeList,
             {
@@ -168,6 +168,19 @@ export default function ManageFacilities() {
 
     fetchFacilitiesData();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchViruData = async () => {
+  //     try {
+  //       const viruData = axios.get(`https://ecoquest-backend.onrender.com/get`);
+  //       console.log("Viru data: ", (await viruData).data);
+  //     } catch (error) {
+  //       console.error("Error fetching data: ", error);
+  //     }
+  //   };
+
+  //   fetchViruData();
+  // }, []);
 
   function getRowId(row) {
     return row.fac_id;

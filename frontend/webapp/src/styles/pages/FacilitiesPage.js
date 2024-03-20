@@ -13,6 +13,21 @@ export const FacilitiesContainer = styled(Box) (({theme}) => ({
         },
 }));
 
+export const MainHeader = styled(Typography) (({theme}) => ({
+    color: Colors.secondary,
+    fontFamily: "'merriweather', cursive",
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    textDecoration: 'underline',
+    textDecorationColor: Colors.primary,
+    padding: '10px 20px',
+    textAlign: 'center',
+    [theme.breakpoints.down('md')]: {
+        fontSize: '1.5rem',
+        padding: '10px',
+    },
+}));
+
 export const FacilityContainer = styled(Box) (({direction, theme}) => ({
     display: 'flex',
     alignSelf: direction === "left" ? 'flex-start' : 'flex-end',
@@ -95,7 +110,7 @@ export const FacilityContent = styled(Box) (({theme}) => ({
 }));
 
 export const ContentHeader = styled(Typography) (({theme}) => ({
-    color: Colors.black,
+    color: Colors.secondary,
     fontFamily: "'merriweather', cursive",
     textUnderlinePosition: 'under',
     textDecoration: 'underline',
