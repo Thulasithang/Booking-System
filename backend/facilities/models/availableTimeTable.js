@@ -17,19 +17,30 @@ const AvailableTimeTable = sequelize.define(
         model: "facilities",
         key: "fac_id",
       },
+      coach_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "coaches",
+          key: "coach_id",
+        },
+      }
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    available_slots: {
-      type: DataTypes.ARRAY(DataTypes.TIME),
-      allowNull: false,
-    },
-    booked_players: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: true,
-    },
+    // available_slots: {
+    //   type: DataTypes.ARRAY(DataTypes.TIME),
+    //   allowNull: false,
+    // },
+    // booked_players: {
+    //   type: DataTypes.ARRAY(DataTypes.INTEGER),
+    //   allowNull: true,
+    // },
+    slot_remaining_players: {
+      type: DataTypes.ARRAY(DataTypes.JSON), // [{slot: 'HH:mm', remaining_players: 5}]
+    }
   },
   {
     timestamps: false,

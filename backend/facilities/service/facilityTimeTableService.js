@@ -113,7 +113,7 @@ const getAvailableTimeSlots = async (type_id, date, callback) => {
     const facilitiesByType = await facilityRepository.getAllFacilitiesByTypeId(
       type_id
     );
-    // console.log("facilitiesByType: ", facilitiesByType);
+    console.log("facilitiesByType: ", facilitiesByType);
     const dayOfWeek = moment(date).format("dddd").toLowerCase();
     const availableSlots = [];
     const promises = facilitiesByType.map(async (facility) => {

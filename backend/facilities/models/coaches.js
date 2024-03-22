@@ -21,10 +21,6 @@ const Coaches = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    max_students: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   },
   {
     timestamps: false,

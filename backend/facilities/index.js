@@ -16,6 +16,8 @@ const facilityController = require("./controllers/facilityController");
 app.use("/", facilityController);
 
 const facilityTimeTableController = require("./controllers/facilityTimeTableController");
+const CoachAvailableTimeTable = require('./models/coachAvailableTimeTable');
+const CoachExceptionTimeTable = require('./models/coachExceptionTimeTable');
 app.use("/tt", facilityTimeTableController);
 
 app.listen(PORT,  () => {
@@ -24,8 +26,10 @@ app.listen(PORT,  () => {
 
 // (async () => {
 //       try {
+//           await Coaches.sync({ force: true });
 //         await FacilityType.sync({ force: true });
-//         await Coaches.sync({ force: true });
+//         // await CoachAvailableTimeTable.sync({ force: true });
+//         await CoachExceptionTimeTable.sync({ force: true });
 //         await sequelize.sync({ force: true }); // This will drop existing tables and recreate them
 //         console.log("Database synchronized successfully");
 //       } catch (error) {
