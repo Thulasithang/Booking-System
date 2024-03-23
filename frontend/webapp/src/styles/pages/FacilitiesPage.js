@@ -6,7 +6,6 @@ export const FacilitiesContainer = styled(Box) (({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     // padding: '10px 20px',
-    background: Colors.light_gray,
     [theme.breakpoints.down('md')]: {
         // background: 'white',
         padding: '10px 10px',

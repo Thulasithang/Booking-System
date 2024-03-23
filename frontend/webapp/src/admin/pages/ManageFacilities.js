@@ -32,6 +32,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import axios from "axios";
 import dayjs from "dayjs";
+import Table from "../components/Table";
 
 export default function ManageFacilities() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
@@ -126,7 +127,7 @@ export default function ManageFacilities() {
 
   const handleRowSelection = (row) => {
     console.log("row: ", row.row);
-    navigate(`/manage/facilities/${row.id}`, {state: {row: row.row}});
+    navigate(`/manage/facilities/${row.id}`, { state: { row: row.row } });
   };
 
   // every time the drop down list to get facility types is clicked,
@@ -167,20 +168,7 @@ export default function ManageFacilities() {
     };
 
     fetchFacilitiesData();
-  }, []);
-
-  // useEffect(() => {
-  //   const fetchViruData = async () => {
-  //     try {
-  //       const viruData = axios.get(`https://ecoquest-backend.onrender.com/get`);
-  //       console.log("Viru data: ", (await viruData).data);
-  //     } catch (error) {
-  //       console.error("Error fetching data: ", error);
-  //     }
-  //   };
-
-  //   fetchViruData();
-  // }, []);
+  }, [snackbar]);
 
   function getRowId(row) {
     return row.fac_id;
@@ -199,24 +187,14 @@ export default function ManageFacilities() {
       </HeadContainer>
       {/* Table */}
       {facilitiesDataList && (
-        <DataGrid
-          getRowId={getRowId}
+        <Table
           columns={columns}
           rows={facilitiesDataList}
-          onRowClick={(row) => {
-            handleRowSelection(row);
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          // checkboxSelection
+          primaryKeyField={"fac_id"}
         />
       )}
-
       {/*  */}
+
       {/* Dialog Box to get opening hours of the facility */}
       <Dialog
         maxWidth="sm"
@@ -340,6 +318,10 @@ export default function ManageFacilities() {
                     setSnackbar(true);
                     handleClose();
                     // handleSecondOpen();
+                    timeTable.map((day) => {
+                      day.isOpen = false;
+                    });
+                    setType("");
                   } else if (response.data.status === 409) {
                     alert("Facility Already Exists");
                   }
@@ -372,7 +354,7 @@ export default function ManageFacilities() {
             <Stack direction="column">
               <ModalField variant="h6">Maximum Players</ModalField>
               <TextField
-              type="number"
+                type="number"
                 size="small"
                 margin="dense"
                 required
@@ -413,7 +395,7 @@ export default function ManageFacilities() {
             <Stack direction="column">
               <ModalField variant="h6">Price per Hour</ModalField>
               <OutlinedInput
-              type="number"
+                type="number"
                 startAdornment="LKR"
                 size="small"
                 margin="dense"

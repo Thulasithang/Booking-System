@@ -13,6 +13,7 @@ import {
 } from "../../styles/pages/FacilitiesPage";
 import { Data } from "../data/data";
 import axios from "axios";
+import { Colors } from "../../styles/theme";
 
 export default function FacilitiesPage() {
   const theme = useTheme();
@@ -25,43 +26,55 @@ export default function FacilitiesPage() {
     navigate(`/book/${id}`);
   };
 
-useEffect(() => {
-  const fetchFacilityTypeData = async () => {
-    try {
-      const facilityTypeData = await axios.get(`${backend_url}type`);
-      // console.log((await facilitiesData).data);
-      setFacilityTypeDataList((await facilityTypeData).data);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
-  }
-  fetchFacilityTypeData();
-}, []);
+  useEffect(() => {
+    const fetchFacilityTypeData = async () => {
+      try {
+        const facilityTypeData = await axios.get(`${backend_url}type`);
+        // console.log((await facilitiesData).data);
+        setFacilityTypeDataList((await facilityTypeData).data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        setFacilityTypeDataList([]);
+      }
+    };
+    fetchFacilityTypeData();
+  }, []);
 
   console.log(facilityTypeDataList);
   return (
     <FacilitiesContainer>
-      <MainHeader variant="h2" >
-        Our Facilities
-      </MainHeader>
-      { facilityTypeDataList && facilityTypeDataList.map((facility, index) => {
-        let facilityName = facility.type_name.charAt(0).toUpperCase() + facility.type_name.slice(1);
-        return (
-          <FacilityContainer direction={index % 2 !== 0 ? "left" : "right"}>
-            <FacilityImage src='./images/main-swimming.jpg' alt={facility.alt} />
-            <FacilityContent>
-              <ContentHeader variant="h3">{facilityName}</ContentHeader>
-              <ContentDescription>{facility.small_description}</ContentDescription>
-              <FacilityBookButton
-                variant="contained"
-                onClick={() => handleBookNowNavigation(facility.type_id)}
-              >
-                Book Now
-              </FacilityBookButton>
-            </FacilityContent>
-          </FacilityContainer>
-        );
-      })}
+      <MainHeader variant="h2">Our Facilities</MainHeader>
+      {facilityTypeDataList && facilityTypeDataList.length > 0 ? (
+        facilityTypeDataList.map((facility, index) => {
+          let facilityName =
+            facility.type_name.charAt(0).toUpperCase() +
+            facility.type_name.slice(1);
+          return (
+            <FacilityContainer key={index} direction={index % 2 !== 0 ? "left" : "right"}>
+              <FacilityImage
+                src="./images/main-swimming.jpg"
+                alt={facility.alt}
+              />
+              <FacilityContent>
+                <ContentHeader variant="h3">{facilityName}</ContentHeader>
+                <ContentDescription>
+                  {facility.small_description}
+                </ContentDescription>
+                <FacilityBookButton
+                  variant="contained"
+                  onClick={() => handleBookNowNavigation(facility.type_id)}
+                >
+                  Book Now
+                </FacilityBookButton>
+              </FacilityContent>
+            </FacilityContainer>
+          );
+        })
+      ) : (
+        <Typography variant="h4" style={{ color: Colors.secondary }}>
+          Loading...
+        </Typography>
+      )}
     </FacilitiesContainer>
   );
 }

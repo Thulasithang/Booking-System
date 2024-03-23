@@ -1,4 +1,5 @@
 import FacilitiesEditPage from "./admin/pages/FacilitiesEditPage";
+import ManageCoaches from "./admin/pages/ManageCoaches";
 import ManageFacilities from "./admin/pages/ManageFacilities";
 import ManageFacilityType from "./admin/pages/ManageFacilityType";
 
@@ -28,6 +29,11 @@ const AdminRoutes = [
         id: 5,
         path: "/manage/facilities/:id",
         element: <FacilitiesEditPage />,
+    },
+    {
+        id: 6,
+        path: "/manage/coaches",
+        element: <ManageCoaches />,
     }
 ];
 
