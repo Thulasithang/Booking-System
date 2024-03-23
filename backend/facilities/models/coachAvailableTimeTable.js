@@ -39,7 +39,7 @@ const CoachAvailableTimeTable = sequelize.define(
       },
     },
     slot_remaining_players: {
-      type: DataTypes.ARRAY(DataTypes.JSON), // [{slot: 'HH:mm', remaining_players: 5}]
+      type: DataTypes.ARRAY(DataTypes.JSONB), // [{slot: 'HH:mm', remaining_players: 5}]
       allowNull: false,
     },
   },

@@ -1,6 +1,9 @@
 const { where } = require("sequelize");
 const Facility = require("../models/facilities");
 const FacilityType = require("../models/facilityType");
+const sequelize = require("../dbConfig");
+const Coaches = require("../models/coaches");
+const CoachAvailableTimeTable = require("../models/coachAvailableTimeTable");
 
 const getAllFacilities = async () => {
   try {
@@ -159,6 +162,54 @@ const deleteFacility = (id, callback) => {
     });
 };
 
+const findCoachById = async (coach_id) => {
+  try {
+    const coach = await Coaches.findByPk(coach_id);
+    if (coach) {
+      return coach;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log("Error getting coach by id: ", error);
+    throw error;
+  }
+};
+
+const addNewCoach = async (coach, callback) => {
+  try {
+      Coaches.create({
+        coach_id: coach.coach_id,
+        type_id: coach.type_id,
+        price_per_hour: coach.price_per_hour,
+      })
+        .then((coach) => {
+          callback(null, coach);
+        })
+        .catch((err) => {
+          callback(err, null);
+        });
+  }
+  catch (error) {
+    console.log("Error adding new coach: ", error);
+    throw error;
+  }
+};
+
+const addCoachTimeTable = async (records, callback) => {
+  try {
+    console.log("records from repository: ", records);
+    const coachTimeTable = await CoachAvailableTimeTable.bulkCreate(
+      records
+    );
+    callback(null, records);
+  } catch (error) {
+    console.log("Error adding coach timetable: ", error);
+    throw error;
+  }
+};
+
+
 module.exports = {
   getAllFacilities,
   getFacilityById,
@@ -173,4 +224,7 @@ module.exports = {
   addNewFacility,
   checkIfFacilityExists,
   updateFacility,
+  findCoachById,
+  addCoachTimeTable,
+  addNewCoach,
 };

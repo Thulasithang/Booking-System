@@ -172,4 +172,25 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
+
+router.post("/coach/add", async (req, res) => {
+  facilityService.addNewCoach(req.body, (err, newCoach) => {
+    if (!err) {
+      if (newCoach.status === 200) {
+        res
+          .status(200)
+          .json({ status: 200, message: newCoach.message });
+        return;
+      } else if (newCoach.status === 409) {
+        res
+          .status(200)
+          .json({ status: 409, message: "Coach already exists" });
+      }
+    } else {
+      console.log(err);
+      res.status(500).json("Error adding new Coach");
+    }
+  });
+});
+
 module.exports = router;
