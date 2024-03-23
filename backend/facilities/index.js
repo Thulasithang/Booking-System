@@ -20,6 +20,17 @@ const CoachAvailableTimeTable = require('./models/coachAvailableTimeTable');
 const CoachExceptionTimeTable = require('./models/coachExceptionTimeTable');
 app.use("/tt", facilityTimeTableController);
 
+// (async () => {
+//     try {
+//         await CoachAvailableTimeTable.sync({ alter: true });
+//         console.log("CoachAvailableTimeTable synchronized successfully");
+//     }
+//     catch (error) {
+//         console.error("Error syncing CoachAvailableTimeTable:", error);
+//     }
+// });
+//  CoachAvailableTimeTable.sync({ alter: true });
+
 app.listen(PORT,  () => {
     console.log(`facilites service started on port ${PORT}`);
 });
@@ -36,4 +47,5 @@ app.listen(PORT,  () => {
 //         console.error("Error syncing database:", error);
 //       }
 //     })();
+
 

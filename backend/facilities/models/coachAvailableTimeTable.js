@@ -18,8 +18,16 @@ const CoachAvailableTimeTable = sequelize.define(
         key: "coach_id",
       },
     },
-    date: {
+    start_date: {
       type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    end_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    day_of_week: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     fac_id: {
