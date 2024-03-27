@@ -145,19 +145,13 @@ export default function SideBar() {
 
         <List>
           <ListItemButton onClick={handleClick}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Manage Bookings" />
+            <ListItemText primary="Manage Coaching" />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => {navigate("/manage/")}}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText primary="Facility Types" />
+              <ListItemButton sx={{ pl: 4 }} onClick={() => {navigate("/manage/coaches")}}>
+                <ListItemText primary="Coaches" />
               </ListItemButton>
               <ListItemButton sx={{ pl: 4 }} onClick={() => {navigate("/manage/")}}>
                 <ListItemIcon>

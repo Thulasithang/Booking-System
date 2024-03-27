@@ -2,6 +2,7 @@ const { Op, QueryTypes } = require("sequelize");
 
 const ExceptionTimeTable = require("../models/exceptionTimeTable");
 const sequelize = require("../dbConfig");
+const CoachAvailableTimeTable = require("../models/coachAvailableTimeTable");
 
 const checkIfSlotExists = async (fac_id, exception_date, slots) => {
   try {
@@ -104,10 +105,24 @@ const updateDisabledSlots = async (fac_id, exception_date, slots, callback) => {
   }
 };
 
+const addCoachTimeTable = async (records, callback) => {
+  try {
+    console.log("records from repository: ", records);
+    const coachTimeTable = await CoachAvailableTimeTable.bulkCreate(
+      records
+    );
+    callback(null, records);
+  } catch (error) {
+    console.log("Error adding coach timetable: ", error);
+    throw error;
+  }
+};
+
 module.exports = {
   checkIfSlotExists,
   addDisabledSlots,
   updateDisabledSlots,
   getDisabledSlots,
   checkIfFacDateExists,
+  addCoachTimeTable,
 };

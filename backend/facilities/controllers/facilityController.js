@@ -7,8 +7,10 @@ const facilityService = require("../service/facilityService");
 
 router.get("/", (req, res) => {
   try {
+    console.log("came here");
     //Admins require All facilities available, Users require facilities by type
     const type_id = req.query.type_id ? req.query.type_id : null; 
+    console.log("type_id: ", type_id);
     facilityService.getAllFacilitiesForType(type_id, (err, facilities) => {
       if (!err) {
         res.status(200).json(facilities);
@@ -40,7 +42,7 @@ router.get("/type", (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id(\\d+)", (req, res) => {
   facilityRepository.getFacilityById(req.params.id, (err, facility) => {
     if (!err) {
       res.status(200).json(facility);
@@ -174,6 +176,7 @@ router.delete("/:id", async (req, res) => {
 
 
 router.post("/coach/add", async (req, res) => {
+  console.log("req.body: ", req.body);
   facilityService.addNewCoach(req.body, (err, newCoach) => {
     if (!err) {
       if (newCoach.status === 200) {
@@ -189,6 +192,34 @@ router.post("/coach/add", async (req, res) => {
     } else {
       console.log(err);
       res.status(500).json("Error adding new Coach");
+    }
+  });
+});
+
+router.get("/coaches", (req, res) => {
+  try {
+    facilityService.getAllCoaches((err, coaches) => {
+      if (!err) {
+        console.log("coaches: ", coaches);
+        res.status(200).json(coaches);
+      } else {
+        console.log(err);
+        res.status(500).json("Error fetching coaches");
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Error fetching coaches");
+  }
+});
+
+router.get("/coaches/:id(\\d+)", (req, res) => {
+  facilityService.findCoachById(req.params.id, (err, coach) => {
+    if (!err) {
+      res.status(200).json(coach);
+    } else {
+      console.log(err);
+      res.status(500).json("Error fetching coach");
     }
   });
 });

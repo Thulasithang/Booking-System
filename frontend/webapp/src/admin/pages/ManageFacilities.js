@@ -33,10 +33,10 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import axios from "axios";
 import dayjs from "dayjs";
 import Table from "../components/Table";
+import SnackBar from "../components/SnackBar";
 
 export default function ManageFacilities() {
   const backend_url = process.env.REACT_APP_BACKEND_URL;
-  const navigate = useNavigate();
 
   const [typeList, setTypeList] = useState([]);
   const [facilitiesDataList, setFacilitiesDataList] = useState();
@@ -125,10 +125,6 @@ export default function ManageFacilities() {
     setTimeTable(updatedTimeTable);
   };
 
-  const handleRowSelection = (row) => {
-    console.log("row: ", row.row);
-    navigate(`/manage/facilities/${row.id}`, { state: { row: row.row } });
-  };
 
   // every time the drop down list to get facility types is clicked,
   // the list is rendered from the database.
@@ -188,6 +184,7 @@ export default function ManageFacilities() {
       {/* Table */}
       {facilitiesDataList && (
         <Table
+        pageURL={"/manage/facilities"}
           columns={columns}
           rows={facilitiesDataList}
           primaryKeyField={"fac_id"}
@@ -416,14 +413,7 @@ export default function ManageFacilities() {
       </Dialog>
       {/*  */}
 
-      <Snackbar
-        open={snackbar}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        autoHideDuration={6000}
-      >
-        <Alert severity="success">Facility Added</Alert>
-      </Snackbar>
+      <SnackBar open={snackbar} setOpen={setSnackbar} message="Added Facility Successfully" />
     </MainContainer>
   );
 }

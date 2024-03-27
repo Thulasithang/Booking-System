@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 
-export default function Table({ columns, rows, primaryKeyField }) {
+export default function Table({ pageURL, columns, rows, primaryKeyField }) {
 
     console.log("columns: ", columns);
     console.log("rows: ", rows[0].fac_id);
@@ -9,7 +9,7 @@ export default function Table({ columns, rows, primaryKeyField }) {
   const navigate = useNavigate();
   const handleRowSelection = (row) => {
     console.log("row: ", row.row);
-    navigate(`/manage/facilities/${row.id}`, { state: { row: row.row } });
+    navigate(`${pageURL}/${row.id}`, { state: { row: row.row } });
   };
 
   function getRowId(row, primaryKeyField) {

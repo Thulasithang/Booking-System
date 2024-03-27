@@ -6,7 +6,7 @@ const sequelize = require("./dbConfig");
 const Facilities = require('./models/facilities');
 const AvailableTimeTable = require('./models/availableTimeTable');
 const FacilityType = require('./models/facilityType');
-const Coaches = require('./models/coaches');
+const Coaches = require('./models/coachFacilities');
 
 app.use(express.json());
 
@@ -29,7 +29,8 @@ app.use("/tt", facilityTimeTableController);
 //         console.error("Error syncing CoachAvailableTimeTable:", error);
 //     }
 // });
-//  CoachAvailableTimeTable.sync({ alter: true });
+//  Coaches.sync({ force: true });
+// Coaches.sync({ alter: true });
 
 app.listen(PORT,  () => {
     console.log(`facilites service started on port ${PORT}`);

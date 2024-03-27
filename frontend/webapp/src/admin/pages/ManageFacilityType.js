@@ -75,6 +75,7 @@ export default function ManageFacilityType() {
       {/* Table */}
       {facilityTypeDataList && (
         <Table
+          pageURL={"/manage/type"}
           columns={columns}
           rows={facilityTypeDataList}
           primaryKeyField={"type_id"}

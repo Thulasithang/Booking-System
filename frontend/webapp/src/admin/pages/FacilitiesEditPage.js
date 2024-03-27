@@ -56,7 +56,8 @@ function a11yProps(index) {
   };
 }
 
-export default function FacilitiesEditPage() {
+export default function FacilitiesEditPage() { 
+  // TODO get data from backend instead of location. only get id from url
   const location = useLocation(); // Get the location object from the location prop
   const [facilityName, setFacilityName] = useState(
     location.state.row.facility_name

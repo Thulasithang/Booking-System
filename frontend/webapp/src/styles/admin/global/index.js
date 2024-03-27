@@ -125,8 +125,8 @@ export const TimePickerContainer = styled(Box)(() => ({
 
 export const TabContainer = styled(Box)(() => ({
   display: 'flex',
-  width: '50%',
-  maxWidth: '50%',
+  width: '100%',
+  maxWidth: '100%',
   flexDirection: 'column',
   justifyContent: 'center',
   alignContent: 'center',

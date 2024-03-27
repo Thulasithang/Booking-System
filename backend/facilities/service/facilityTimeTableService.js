@@ -4,6 +4,58 @@ const moment = require("moment");
 const facilityRepository = require("../repository/facilityRepository");
 const facilityTimeTableRepository = require("../repository/facilityTimeTableRepository");
 
+function generateTimeSlots(openingTime, closingTime) {
+  const slots = [];
+  let timeSlot = moment(openingTime, "HH:mm:ss");
+  // console.log(openTime);
+
+  while (timeSlot.isBefore(moment(closingTime, "HH:mm:ss"))) {
+    slots.push(timeSlot.format("HH:mm"));
+    timeSlot.add(1, "hour");
+  }
+  return slots;
+}
+
+function addTimeSlotsForCoach(
+  records,
+  coach_id,
+  fac_id,
+  dateTimeObject, //{"start_date", "start_time", "close_time"}
+  repeat,
+  max_students
+) {
+  //convert date to day of week
+  // get 4 X repeat months from date
+  // for each week, for that day of week, add slots as [{time: time, max_students: max_students}]
+  const dayOfWeek = moment(dateTimeObject.start_date).day();
+  const dayString = moment(dateTimeObject.start_date).format("dddd");
+  const startDate = moment(dateTimeObject.start_date);
+  const endDate = moment(dateTimeObject.start_date).add(repeat, "months");
+  let currentDate = startDate;
+  const coachSlots = [];
+  const day = currentDate.day();
+  if (day === dayOfWeek) {
+    generateTimeSlots(
+      dateTimeObject.start_time,
+      dateTimeObject.close_time
+    ).forEach((time) => {
+      coachSlots.push({ slot: time, remaining_players: max_students });
+    });
+    console.log("coachSlots: ", JSON.stringify(coachSlots));
+    records.push({
+      coach_id: coach_id,
+      fac_id: fac_id,
+      slot_remaining_players: coachSlots,
+      start_date: startDate.format("YYYY-MM-DD"),
+      end_date: endDate.format("YYYY-MM-DD"),
+      day_of_week: dayString.toLowerCase(),
+    });
+  }
+
+  currentDate.add(7, "day");
+}
+// newCoach.slots = coachSlots;
+
 const addDisabledTimeSlots = async (exceptionData, callback) => {
   try {
     // check if fac exists
@@ -125,10 +177,11 @@ const getAvailableTimeSlots = async (type_id, date, callback) => {
           slots: [],
         };
       } else {
-        const disabledSlots = await facilityTimeTableRepository.getDisabledSlots(
-          facility.fac_id,
-          date
-        );
+        const disabledSlots =
+          await facilityTimeTableRepository.getDisabledSlots(
+            facility.fac_id,
+            date
+          );
         if (disabledSlots.length === 0) {
           return {
             fac_id: facility.fac_id,
@@ -139,12 +192,14 @@ const getAvailableTimeSlots = async (type_id, date, callback) => {
           return {
             fac_id: facility.fac_id,
             facility_name: facility.facility_name,
-            slots: general_slots.filter((slot) => !disabledSlots.includes(slot)),
+            slots: general_slots.filter(
+              (slot) => !disabledSlots.includes(slot)
+            ),
           };
         }
       }
     });
-    
+
     Promise.all(promises)
       .then((availableSlots) => {
         console.log("availableSlots: ", availableSlots);
@@ -154,9 +209,52 @@ const getAvailableTimeSlots = async (type_id, date, callback) => {
         console.error("Error processing available slots: ", error);
         callback(error, null);
       });
-    
   } catch (error) {
     console.log("Error getting available time slots from catch: ", error);
+    throw error;
+  }
+};
+
+const addCoachSlots = async (coachData, callback) => {
+  try {
+    const records = [];
+    const checkIfCoachExists = await facilityRepository.findCoachById(
+      coachData.coach_id
+    );
+    console.log("checkIfCoachExists: ", checkIfCoachExists);
+    if (checkIfCoachExists === null) {
+      callback(null, { status: 404, message: "Coach not found" });
+      return;
+    }
+    for (let i = 0; i < coachData.date_time.length; i++) {
+      console.log("came to for loop");
+      if (coachData.repeat > 0) {
+        addTimeSlotsForCoach(
+          records,
+          parseInt(coachData.coach_id, 10),
+          coachData.fac_id,
+          coachData.date_time[i],
+          coachData.repeat,
+          coachData.max_students
+        );
+      }
+    }
+    console.log(records);
+    // callback(null, { status: 200, message: records });
+    await facilityTimeTableRepository.addCoachTimeTable(
+      records,
+      (err, addedCoach) => {
+        if (!err) {
+          console.log("added new coach from service");
+          callback(null, { status: 200, message: addedCoach });
+        } else {
+          console.log(err);
+          callback(500, null);
+        }
+      }
+    );
+  } catch (error) {
+    console.log("Error adding new coach from catch: ", error);
     throw error;
   }
 };
@@ -164,4 +262,5 @@ const getAvailableTimeSlots = async (type_id, date, callback) => {
 module.exports = {
   addDisabledTimeSlots,
   getAvailableTimeSlots,
+  addCoachSlots,
 };

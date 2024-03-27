@@ -1,3 +1,4 @@
+import CoachesEditPage from "./admin/pages/CoachesEditPage";
 import FacilitiesEditPage from "./admin/pages/FacilitiesEditPage";
 import ManageCoaches from "./admin/pages/ManageCoaches";
 import ManageFacilities from "./admin/pages/ManageFacilities";
@@ -34,6 +35,11 @@ const AdminRoutes = [
         id: 6,
         path: "/manage/coaches",
         element: <ManageCoaches />,
+    },
+    {
+        id: 7,
+        path: "/manage/coaches/:id",
+        element: <CoachesEditPage />,
     }
 ];
 

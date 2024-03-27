@@ -6,6 +6,11 @@ body {
   margin: 0; /* Remove the margin */
 }
 
+/* ::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; 
+} */
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

@@ -52,7 +52,7 @@ function addTimeSlotsForCoach(
     records.push({
       coach_id: coach_id,
       fac_id: fac_id,
-      slot_remaining_players:coachSlots,
+      slot_remaining_players: coachSlots,
       start_date: startDate.format("YYYY-MM-DD"),
       end_date: endDate.format("YYYY-MM-DD"),
       day_of_week: dayString.toLowerCase(),
@@ -179,52 +179,57 @@ const getAllFacilitiesForType = async (type_id, callback) => {
 const addNewCoach = async (coach, callback) => {
   try {
     const records = [];
-    const checkIfCoachExists = await facilityRepository.findCoachById(
-      coach.coach_id
-    );
-    console.log("checkIfCoachExists: ", checkIfCoachExists);
-    if (checkIfCoachExists === null) {
-      console.log("came to null");
-      const newCoach = {
-        coach_id: coach.coach_id,
-        type_id: parseInt(coach.type_id, 10),
-        price_per_hour: parseFloat(coach.price_per_hour).toFixed(2),
-      };
-      await facilityRepository.addNewCoach(newCoach, (err, addedCoach) => {
-        if (!err) {
-          return;
-        } else {
-          console.log(err);
-          callback(500, err);
-        }
-      });
-    }
-    for (let i = 0; i < coach.date_time.length; i++) {
-      console.log("came to for loop")
-      if (coach.repeat > 0) {
-        addTimeSlotsForCoach(
-          records,
-          coach.coach_id,
-          coach.fac_id,
-          coach.date_time[i],
-          coach.repeat,
-          coach.max_students
-        );
-      }
-    }
-    console.log(records);
-    // callback(null, { status: 200, message: records });
-    await facilityRepository.addCoachTimeTable(records, (err, addedCoach) => {
+    // TODO: Add check for existing coach
+    // const checkIfCoachExists = await facilityRepository.findCoachById(
+    //   coach.coach_id
+    // );
+    // console.log("checkIfCoachExists: ", checkIfCoachExists);
+    // if (checkIfCoachExists === null) {
+    console.log("came to null");
+    const newCoach = {
+      coach_name: coach.name,
+      coach_phone: coach.phone,
+      type_id: parseInt(coach.type, 10),
+      coach_email: coach.email,
+      coach_description: coach.description,
+      coach_image: coach.image,
+      price_per_hour: parseFloat(coach.price_per_hour).toFixed(2),
+    };
+    await facilityRepository.addNewCoach(newCoach, (err, addedCoach) => {
       if (!err) {
-        console.log("added new coach from service");
         callback(null, { status: 200, message: addedCoach });
+        return;
       } else {
         console.log(err);
-        callback(500, null);
+        callback(500, err);
       }
     });
   } catch (error) {
     console.log("Error adding new coach from catch: ", error);
+    throw error;
+  }
+};
+
+const getAllCoaches = async (callback) => {
+  try {
+    const coaches = await facilityRepository.getAllCoaches();
+    callback(null, coaches);
+  } catch (error) {
+    console.log("Error fetching coaches from catch: ", error);
+    throw error;
+  }
+};
+
+const findCoachById = async (coach_id, callback) => {
+  try {
+    const coach = await facilityRepository.findCoachById(coach_id);
+    if (coach) {
+      callback(null, coach);
+    } else {
+      callback(404, null);
+    }
+  } catch (error) {
+    console.log("Error getting coach by id: ", error);
     throw error;
   }
 };
@@ -237,4 +242,6 @@ module.exports = {
   getAllFacilitiesForType,
   updateFacility,
   addNewCoach,
+  getAllCoaches,
+  findCoachById,
 };
