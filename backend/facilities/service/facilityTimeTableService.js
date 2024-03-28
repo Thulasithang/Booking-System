@@ -30,7 +30,7 @@ function addTimeSlotsForCoach(
   const dayOfWeek = moment(dateTimeObject.start_date).day();
   const dayString = moment(dateTimeObject.start_date).format("dddd");
   const startDate = moment(dateTimeObject.start_date);
-  const endDate = moment(dateTimeObject.start_date).add(repeat, "months");
+    const endDate = moment(dateTimeObject.start_date).add(repeat, "months");
   let currentDate = startDate;
   const coachSlots = [];
   const day = currentDate.day();
@@ -226,9 +226,12 @@ const addCoachSlots = async (coachData, callback) => {
       callback(null, { status: 404, message: "Coach not found" });
       return;
     }
+    if (coachData.date_time.length === 0) {
+      callback(null, { status: 400, message: "Invalid date_time" });
+      return;
+    }
     for (let i = 0; i < coachData.date_time.length; i++) {
       console.log("came to for loop");
-      if (coachData.repeat > 0) {
         addTimeSlotsForCoach(
           records,
           parseInt(coachData.coach_id, 10),
@@ -237,7 +240,6 @@ const addCoachSlots = async (coachData, callback) => {
           coachData.repeat,
           coachData.max_students
         );
-      }
     }
     console.log(records);
     // callback(null, { status: 200, message: records });

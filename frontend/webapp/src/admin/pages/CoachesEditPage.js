@@ -55,7 +55,7 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Box>{children}</Box>
+          <Box sx={{color: Colors.secondary}}>{children}</Box>
         </Box>
       )}
     </div>
@@ -91,8 +91,6 @@ export default function CoachesEditPage() {
   const [tabValue, setTabValue] = React.useState(0);
   const [timeSlotRecords, setTimeSlotRecords] = useState([]);
   const [snackbar, setSnackbar] = useState(false);
-  const [isTimeSlotRecordsUpdated, setTimeSlotRecordsUpdated] = useState(false);
-
 
   const [timeTable, setTimeTable] = useState([
     {
@@ -179,17 +177,22 @@ export default function CoachesEditPage() {
     fetchFacilityData();
   }, [typeId]);
 
-  useEffect(() => {
-    console.log("timeSlotRecords: ", timeSlotRecords);
-  }, [timeSlotRecords]);
-
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
   //Open and close functions for the timetable Dialog Box
   const handleTimeTableOpen = () => setTimeTableOpen(true);
-  const handleTimeTableClose = () => setTimeTableOpen(false);
+  const handleTimeTableClose = () => {
+    setTimeTableOpen(false);
+    timeTable.map((day) => {
+      day.isOpen = false;
+    });
+    setMaxStudents(0);
+    setFacility("");
+    setStartDate(dayjs());
+    setRepeat(0);
+  };
 
   const handleSwitchChange = (index) => (event) => {
     const updatedTimeTable = [...timeTable];
@@ -248,42 +251,66 @@ export default function CoachesEditPage() {
     if (timeToSend.length === 0) {
       alert("Please select atleast one day");
       return;
-    } else {
-      timeToSend.forEach((day) => {
-        const nextDate = getNextOccurence(start_date, day.day);
-        setTimeSlotRecords((timeSlotRecords) => [
-          ...timeSlotRecords,
-          {
-            start_date: nextDate.format("YYYY-MM-DD"),
-            start_time: day.open,
-            close_time: day.close,
-          },
-        ]);
-      });
-      setTimeSlotRecordsUpdated(true);
     }
-  };
+    const dateTimeArr = timeToSend.map((day) => {
+      const nextDate = getNextOccurence(start_date, day.day);
+      return {
+        start_date: nextDate.format("YYYY-MM-DD"),
+        start_time: day.open,
+        close_time: day.close,
+      };
+    });
 
-  useEffect(() => {
     axios
       .post(`${backend_url}tt/coach/add`, {
         coach_id: id,
-        date_time: timeSlotRecords,
+        date_time: dateTimeArr,
         repeat: repeat,
         fac_id: facility,
         max_students: maxStudents,
       })
       .then((response) => {
-        if (response.status === 200) {
+        console.log("response: ", response.data.status);
+        if (response.data.status === 200) {
           setSnackbar(true);
           console.log("Time slots added successfully");
-          setTimeSlotRecordsUpdated(false);
+          handleTimeTableClose();
+        } else if (response.data.status === 400) {
+          alert("No slots added. Please check the slots and try again");
         } else {
           console.log("Error adding time slots");
           alert("Error adding time slots");
         }
       });
-  }, [isTimeSlotRecordsUpdated === true]);
+
+    console.log("timeSlotRecords: ", timeSlotRecords);
+  };
+
+  // useEffect(() => {
+  //   axios
+  //     .post(`${backend_url}tt/coach/add`, {
+  //       coach_id: id,
+  //       date_time: timeSlotRecords,
+  //       repeat: repeat,
+  //       fac_id: facility,
+  //       max_students: maxStudents,
+  //     })
+  //     .then((response) => {
+  //       console.log("response: ", response.data.status);
+  //       if (response.data.status === 200) {
+  //         setSnackbar(true);
+  //         console.log("Time slots added successfully");
+  //         handleTimeTableClose();
+  //       } else if (response.data.status === 400) {
+  //         alert("No slots added. Please check the slots and try again");
+  //       } else {
+  //         console.log("Error adding time slots");
+  //         alert("Error adding time slots");
+  //       }
+  //     });
+  // }, [isTimeTableUpdated]);
+
+  console.log("timeslotrecords outside: ", timeSlotRecords);
 
   return (
     <MainContainer>
@@ -295,7 +322,7 @@ export default function CoachesEditPage() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <CustomTab label="Edit Facility Details" {...a11yProps(0)} />
+            <CustomTab label="Coach Details" {...a11yProps(0)} />
             <CustomTab label="Add New Time Slots" {...a11yProps(1)} />
           </Tabs>
         </Box>
@@ -311,15 +338,6 @@ export default function CoachesEditPage() {
               onChange={(e) => setCoachName(e.target.value)}
               variant="outlined"
               margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Max Users"
-              value={maxStudents}
-              onChange={(e) => setMaxStudents(e.target.value)}
-              variant="outlined"
-              margin="normal"
-              type="number"
             />
             <TextField
               fullWidth
@@ -444,38 +462,37 @@ export default function CoachesEditPage() {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
+                  flexWrap: "wrap",
                   gap: "1rem",
                 }}
               >
-                <Stack direction="column" sx={{ width: "30%" }}>
+                <Stack direction="column" sx={{ width: "50%" }}>
                   <ModalField variant="h6">Start From</ModalField>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{ maxWidth: "100%" }}
                       value={startDate}
+                      minDate={dayjs()}
                       onChange={(date) => setStartDate(date)}
                     />
                   </LocalizationProvider>
                 </Stack>
-                <Stack direction="column" sx={{ width: "30%" }}>
+                <Stack direction="column" sx={{ width: "40%" }}>
                   <ModalField variant="h6">Repeat For</ModalField>
                   <TextField
                     type="number"
                     id="repeat"
                     name="repeat"
+                    value={repeat}
                     onChange={(event) => {
                       setRepeat(event.target.value);
                     }}
                     sx={{ maxWidth: "100%" }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">Months</InputAdornment>
-                      ),
-                    }}
+                    placeholder="Months"
                     helperText="Leave as 0 for one time booking"
                   />
                 </Stack>
-                <Stack direction="column" sx={{ width: "40%" }}>
+                <Stack direction="column" sx={{ width: "50%" }}>
                   <ModalField variant="h6">Facility Using</ModalField>
                   <Select
                     id="type"
@@ -493,6 +510,19 @@ export default function CoachesEditPage() {
                       );
                     })}
                   </Select>
+                </Stack>
+                <Stack direction="column" sx={{ width: "40%" }}>
+                  <ModalField variant="h6">Students</ModalField>
+                  <TextField
+                    type="number"
+                    id="max_students"
+                    name="max_students"
+                    value={maxStudents}
+                    onChange={(event) => {
+                      setMaxStudents(event.target.value);
+                    }}
+                    sx={{ maxWidth: "100%" }}
+                  />
                 </Stack>
               </Box>
               <DialogActions>

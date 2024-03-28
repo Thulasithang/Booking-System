@@ -22,7 +22,7 @@ export const HeadContainer = styled(Box)(() => ({
 
 export const TitleHeader = styled(Typography)(() => ({
   position: "relative",
-  color: Colors.primary,
+  color: Colors.secondary,
   fontSize: "2rem",
   fontWeight: "bold",
   textAlign: "center",
@@ -136,9 +136,9 @@ export const TabContainer = styled(Box)(() => ({
 
 export const CustomTab = styled(Tab)(() => ({
   fontFamily: "'Righteous', cursive",
-  color: Colors.primary,
+  color: Colors.secondary,
   "&.Mui-selected": {
-    color: Colors.primary,
+    color: Colors.secondary,
     fontWeight: 'bold',
   },
 }));
